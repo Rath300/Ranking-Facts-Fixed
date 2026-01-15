@@ -1,0 +1,244 @@
+{
+  "barchart": {
+    "College Name": {
+      "bins": [
+        "University of California--Davis",
+        "Stanford University",
+        "University of California--Santa Barbara",
+        "Duke University",
+        "Georgia Institute of Technology",
+        "Cornell University",
+        "University of California--Berkeley",
+        "University of North Carolina--Chapel Hill",
+        "Rutgers The State University of New Jersey--New Brunswick",
+        "Massachusetts Institute of Technology",
+        "University of California--Irvine",
+        "Columbia University",
+        "University of Wisconsin--Madison",
+        "Carnegie Mellon University",
+        "University of California--Los Angeles",
+        "Indiana University--Bloomington",
+        "Washington University in St. Louis",
+        "University of Virginia",
+        "University of Minnesota--Twin Cities",
+        "University of Utah",
+        "Harvard University",
+        "University of Maryland--College Park",
+        "Virginia Polytechnic Institute and State University",
+        "University of Southern California",
+        "Pennsylvania State University",
+        "Northwestern University",
+        "Johns Hopkins University",
+        "University of Texas--Austin",
+        "University of Pennsylvania",
+        "Arizona State University",
+        "Texas A&M University--College Station",
+        "Princeton University",
+        "University of Washington",
+        "Yale University",
+        "Dartmouth College",
+        "Brown University",
+        "University of California--San Diego",
+        "Boston University",
+        "University of Chicago",
+        "University of Colorado--Boulder",
+        "University of Rochester",
+        "New York University",
+        "Ohio State University",
+        "Purdue University--West Lafayette",
+        "Northeastern University",
+        "University of Massachusetts--Amherst",
+        "University of Arizona",
+        "State University of New York--Stony Brook",
+        "University of Michigan",
+        "University of Illinois--Urbana-Champaign",
+        "Rice University"
+      ],
+      "counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "Department Size": {
+      "bins": [
+        "Large",
+        "Small"
+      ],
+      "counts": [
+        29,
+        22
+      ]
+    },
+    "Regional Code": {
+      "bins": [
+        "NE",
+        "W",
+        "MW",
+        "SA",
+        "SC"
+      ],
+      "counts": [
+        18,
+        13,
+        10,
+        7,
+        3
+      ]
+    }
+  },
+  "histogram": {
+    "Average Count": {
+      "bin_l": [
+        -0.795,
+        -0.354,
+        0.087,
+        0.528,
+        0.968,
+        1.409,
+        1.85,
+        2.291,
+        2.732,
+        3.172
+      ],
+      "counts": [
+        28,
+        8,
+        4,
+        4,
+        1,
+        3,
+        0,
+        1,
+        1,
+        1
+      ]
+    },
+    "Faculty": {
+      "bin_l": [
+        -1.213,
+        -0.63,
+        -0.047,
+        0.536,
+        1.119,
+        1.703,
+        2.286,
+        2.869,
+        3.452,
+        4.036
+      ],
+      "counts": [
+        13,
+        18,
+        8,
+        8,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1
+      ]
+    },
+    "GRE": {
+      "bin_l": [
+        -2.575,
+        -2.206,
+        -1.837,
+        -1.468,
+        -1.1,
+        -0.731,
+        -0.362,
+        0.007,
+        0.376,
+        0.745
+      ],
+      "counts": [
+        2,
+        1,
+        2,
+        5,
+        2,
+        3,
+        5,
+        8,
+        8,
+        15
+      ]
+    },
+    "Pub Count": {
+      "bin_l": [
+        -1.849,
+        -1.294,
+        -0.739,
+        -0.184,
+        0.371,
+        0.926,
+        1.482,
+        2.037,
+        2.592,
+        3.147
+      ],
+      "counts": [
+        5,
+        7,
+        8,
+        13,
+        13,
+        2,
+        1,
+        1,
+        0,
+        1
+      ]
+    }
+  }
+}

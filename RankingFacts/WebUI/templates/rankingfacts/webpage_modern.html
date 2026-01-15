@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="{% static 'icons/frontpage/favicon.ico' %}" rel="shortcut icon">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/rf-modern.css' %}" rel="stylesheet">
+    <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+</head>
+<body>
+    <nav class="rf-navbar">
+        <div class="container">
+            <div class="rf-navbar-inner">
+                <a class="navbar-brand" href="{% url 'rankingfacts:base' %}">
+                    <span class="rf-badge">RF</span>
+                    <span class="rf-brand-text">Ranking Facts</span>
+                </a>
+                <div class="rf-nav-links">
+                    <a class="rf-nav-link" href="https://dataresponsibly.github.io/">About</a>
+                    <a class="rf-nav-link" href="https://dataresponsibly.github.io/people/">Contact</a>
+                    <a class="rf-nav-link" href="https://github.com/DataResponsibly/RankingFacts">Code</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container rf-hero">
+        <div class="row align-items-center" style="margin-bottom: 64px;">
+            <div class="col-lg-6">
+                <div class="rf-pill mb-3">Transparent, fair, and explainable rankings</div>
+                <h1 class="rf-hero-title mb-3">Generate a nutritional label for your ranking in minutes.</h1>
+                <p class="rf-hero-subtitle mb-4">Upload a CSV, pick your scoring attributes, and inspect fairness, stability, and diversity with an easy-to-read label. No changes to your data or logic—just a clearer experience.</p>
+                <div class="rf-hero-cta mb-3">
+                    <a class="rf-btn rf-btn-primary" href="{% url 'rankingfacts:upload_data' %}">Upload your data</a>
+                    <a class="rf-btn rf-btn-secondary" href="{% url 'rankingfacts:sample_data' %}">Try our sample datasets</a>
+                </div>
+                <div class="text-muted small">We support numeric, categorical, and binary columns. CSV only.</div>
+            </div>
+            <div class="col-lg-5 offset-lg-1 mt-5 mt-lg-0">
+                <div class="rf-card">
+                    <div class="rf-small-heading mb-3">HOW IT WORKS</div>
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="rf-step">
+                            <div class="rf-step-number">1</div>
+                            <div class="rf-step-body">
+                                <div class="font-weight-bold mb-1">Load data</div>
+                                <div class="rf-muted">Upload a CSV or pick a sample dataset.</div>
+                            </div>
+                        </div>
+                        <div class="rf-step">
+                            <div class="rf-step-number">2</div>
+                            <div class="rf-step-body">
+                                <div class="font-weight-bold mb-1">Set parameters</div>
+                                <div class="rf-muted">Choose scoring attributes, weights, and sensitive features.</div>
+                            </div>
+                        </div>
+                        <div class="rf-step">
+                            <div class="rf-step-number">3</div>
+                            <div class="rf-step-body">
+                                <div class="font-weight-bold mb-1">Review the label</div>
+                                <div class="rf-muted">See stability, correlation, diversity, and fairness results.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rf-alert mt-4">
+                        <div class="font-weight-bold mb-1">Privacy-friendly</div>
+                        <div class="rf-muted small">Your data stays in this session. We don't alter or share it.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="rf-section">
+            <h4 class="rf-section-title mb-4">Why Ranking Facts?</h4>
+            <div class="rf-grid-3">
+                <div class="rf-card-quiet">
+                    <div class="font-weight-bold mb-2">Explainability</div>
+                    <div class="rf-muted">Summaries and correlations show which attributes drive scores.</div>
+                </div>
+                <div class="rf-card-quiet">
+                    <div class="font-weight-bold mb-2">Fairness checks</div>
+                    <div class="rf-muted">FA*IR, Pairwise, and Proportion oracles validate sensitive groups.</div>
+                </div>
+                <div class="rf-card-quiet">
+                    <div class="font-weight-bold mb-2">Stability</div>
+                    <div class="rf-muted">Slope diagnostics highlight whether small changes disrupt top rankings.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="rf-footer">
+        <div class="container text-center">
+            © 2018 <a href="https://dataresponsibly.github.io/">Data Responsibly</a> | <a href="https://github.com/DataResponsibly/RankingFacts">Code</a> | <a href="https://dataresponsibly.github.io/people/">Contact us</a>
+        </div>
+    </footer>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
+

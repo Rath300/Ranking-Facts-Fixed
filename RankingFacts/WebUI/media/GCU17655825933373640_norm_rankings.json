@@ -1,0 +1,120 @@
+{
+    "att0": {
+        "weight": 1.0,
+        "rank": "StatusExistingAcc_unchecked",
+        "order": "higher"
+    },
+    "att1": {
+        "weight": 1.0,
+        "rank": "DurationMonth_unchecked",
+        "order": "higher"
+    },
+    "att2": {
+        "weight": 1.0,
+        "rank": "CreditHistory_unchecked",
+        "order": "higher"
+    },
+    "att3": {
+        "weight": 1.0,
+        "rank": "Purpose",
+        "order": "higher"
+    },
+    "att4": {
+        "weight": 1.0,
+        "rank": "CreditAmount_unchecked",
+        "order": "higher"
+    },
+    "att5": {
+        "weight": 1.0,
+        "rank": "SavingsAccount_unchecked",
+        "order": "higher"
+    },
+    "att6": {
+        "weight": 1.0,
+        "rank": "EmploymentLength_unchecked",
+        "order": "higher"
+    },
+    "att7": {
+        "weight": 1.0,
+        "rank": "InstallmentRate_unchecked",
+        "order": "higher"
+    },
+    "att8": {
+        "weight": 1.0,
+        "rank": "MarriedNSex_unchecked",
+        "order": "higher"
+    },
+    "att9": {
+        "weight": 1.0,
+        "rank": "Debtors_unchecked",
+        "order": "higher"
+    },
+    "att10": {
+        "weight": 1.0,
+        "rank": "ResidenceLength_unchecked",
+        "order": "higher"
+    },
+    "att11": {
+        "weight": 1.0,
+        "rank": "Property_unchecked",
+        "order": "higher"
+    },
+    "att12": {
+        "weight": 1.0,
+        "rank": "Age_unchecked",
+        "order": "higher"
+    },
+    "att13": {
+        "weight": 1.0,
+        "rank": "InstallmentPlans_unchecked",
+        "order": "higher"
+    },
+    "att14": {
+        "weight": 1.0,
+        "rank": "Housing_unchecked",
+        "order": "higher"
+    },
+    "att15": {
+        "weight": 1.0,
+        "rank": "ExistingCredit_unchecked",
+        "order": "higher"
+    },
+    "att16": {
+        "weight": 1.0,
+        "rank": "Job_unchecked",
+        "order": "higher"
+    },
+    "att17": {
+        "weight": 1.0,
+        "rank": "NumPeopleLiable_unchecked",
+        "order": "higher"
+    },
+    "att18": {
+        "weight": 1.0,
+        "rank": "Telephone_unchecked",
+        "order": "higher"
+    },
+    "att19": {
+        "weight": 1.0,
+        "rank": "ForeignWorker_unchecked",
+        "order": "higher"
+    },
+    "att20": {
+        "weight": 1.0,
+        "rank": "CreditEval_unchecked",
+        "order": "higher"
+    },
+    "ranked_atts": [
+        "Purpose"
+    ],
+    "ranked_atts_weight": [
+        1.0
+    ],
+    "checked_sensi_atts": [
+        "NumPeopleLiable",
+        "CreditEval"
+    ],
+    "checked_cate_atts": [
+        "AgeBinary"
+    ]
+}

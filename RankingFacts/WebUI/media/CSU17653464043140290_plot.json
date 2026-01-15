@@ -1,0 +1,244 @@
+{
+  "barchart": {
+    "College Name": {
+      "bins": [
+        "Yale University",
+        "Princeton University",
+        "Washington University in St. Louis",
+        "New York University",
+        "University of Utah",
+        "Indiana University--Bloomington",
+        "Rice University",
+        "Northeastern University",
+        "University of California--Irvine",
+        "Ohio State University",
+        "University of Pennsylvania",
+        "University of Illinois--Urbana-Champaign",
+        "Carnegie Mellon University",
+        "State University of New York--Stony Brook",
+        "Pennsylvania State University",
+        "Columbia University",
+        "University of California--Los Angeles",
+        "Northwestern University",
+        "University of California--Davis",
+        "University of North Carolina--Chapel Hill",
+        "University of Maryland--College Park",
+        "Purdue University--West Lafayette",
+        "Massachusetts Institute of Technology",
+        "Georgia Institute of Technology",
+        "Texas A&M University--College Station",
+        "University of Wisconsin--Madison",
+        "University of Massachusetts--Amherst",
+        "University of Michigan",
+        "University of California--San Diego",
+        "Stanford University",
+        "University of California--Berkeley",
+        "University of Southern California",
+        "University of Minnesota--Twin Cities",
+        "University of Virginia",
+        "University of Rochester",
+        "Boston University",
+        "University of Arizona",
+        "Johns Hopkins University",
+        "Dartmouth College",
+        "University of Texas--Austin",
+        "Harvard University",
+        "Cornell University",
+        "University of Washington",
+        "Arizona State University",
+        "University of Colorado--Boulder",
+        "University of California--Santa Barbara",
+        "Duke University",
+        "Brown University",
+        "University of Chicago",
+        "Virginia Polytechnic Institute and State University",
+        "Rutgers The State University of New Jersey--New Brunswick"
+      ],
+      "counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "Department Size": {
+      "bins": [
+        "Large",
+        "Small"
+      ],
+      "counts": [
+        29,
+        22
+      ]
+    },
+    "Regional Code": {
+      "bins": [
+        "NE",
+        "W",
+        "MW",
+        "SA",
+        "SC"
+      ],
+      "counts": [
+        18,
+        13,
+        10,
+        7,
+        3
+      ]
+    }
+  },
+  "histogram": {
+    "Average Count": {
+      "bin_l": [
+        1.4,
+        3.09,
+        4.78,
+        6.47,
+        8.16,
+        9.85,
+        11.54,
+        13.23,
+        14.92,
+        16.61
+      ],
+      "counts": [
+        28,
+        8,
+        4,
+        4,
+        1,
+        3,
+        0,
+        1,
+        1,
+        1
+      ]
+    },
+    "Faculty": {
+      "bin_l": [
+        14.0,
+        24.8,
+        35.6,
+        46.4,
+        57.2,
+        68.0,
+        78.8,
+        89.6,
+        100.4,
+        111.2
+      ],
+      "counts": [
+        13,
+        18,
+        8,
+        8,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1
+      ]
+    },
+    "GRE": {
+      "bin_l": [
+        757.813,
+        762.032,
+        766.25,
+        770.469,
+        774.688,
+        778.907,
+        783.125,
+        787.344,
+        791.563,
+        795.781
+      ],
+      "counts": [
+        2,
+        1,
+        2,
+        5,
+        2,
+        3,
+        5,
+        8,
+        8,
+        15
+      ]
+    },
+    "Pub Count": {
+      "bin_l": [
+        1.202,
+        1.532,
+        1.862,
+        2.193,
+        2.523,
+        2.853,
+        3.183,
+        3.513,
+        3.844,
+        4.174
+      ],
+      "counts": [
+        5,
+        7,
+        8,
+        13,
+        13,
+        2,
+        1,
+        1,
+        0,
+        1
+      ]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+GeneratedScore,College Name,Average Count,Faculty,GRE,Department Size,Regional Code,Pub Count
+18.3,Carnegie Mellon University,18.3,122,791.3760000000002,Large,NE,2.319
+15.0,Massachusetts Institute of Technology,15.0,64,771.8939999999999,Large,NE,2.667
+14.3,Stanford University,14.3,55,800.0,Large,W,4.504
+11.4,University of California--Berkeley,11.4,50,789.451,Large,W,3.198
+10.5,University of Illinois--Urbana-Champaign,10.5,55,771.8939999999999,Large,MW,2.704
+10.3,University of Washington,10.3,50,795.9760000000001,Large,W,2.1
+8.9,Georgia Institute of Technology,8.9,81,796.5319999999998,Large,SA,1.972
+7.8,University of California--San Diego,7.8,49,796.9860000000001,Large,W,2.7
+6.9,Cornell University,6.9,45,800.0,Large,NE,1.967
+6.8,University of Michigan,6.8,63,800.0,Large,MW,2.852
+6.6,University of Texas--Austin,6.6,43,789.15,Large,SC,2.685
+6.3,Columbia University,6.3,49,788.197,Large,NE,2.74
+6.2,University of Massachusetts--Amherst,6.2,47,796.0,Large,NE,2.285
+5.5,University of Maryland--College Park,5.5,42,791.237,Large,SA,2.426
+5.1,University of Wisconsin--Madison,5.1,35,792.955,Large,MW,2.361
+4.4,University of Southern California,4.4,47,792.951,Large,W,2.665
+4.3,University of California--Los Angeles,4.3,32,797.263,Large,W,2.564
+4.0,Northeastern University,4.0,46,797.429,Large,NE,1.605
+3.6,Purdue University--West Lafayette,3.6,42,771.8939999999999,Large,MW,2.374
+3.4,Harvard University,3.4,29,793.704,Small,NE,2.615
+3.4,University of Pennsylvania,3.4,32,800.0,Large,NE,2.938
+3.2,University of California--Santa Barbara,3.2,28,792.982,Small,W,3.75
+3.2,Princeton University,3.2,27,796.4580000000002,Small,NE,2.45
+3.0,New York University,3.0,29,795.61,Small,NE,1.98
+3.0,Ohio State University,3.0,39,798.061,Large,MW,2.525
+2.9,University of California--Davis,2.9,27,770.617,Small,W,2.311
+2.8,Rutgers The State University of New Jersey--New Brunswick,2.8,33,757.813,Large,NE,1.622
+2.8,University of Minnesota--Twin Cities,2.8,37,777.113,Large,MW,2.265
+2.5,Brown University,2.5,24,768.32,Small,NE,2.369
+2.4,Northwestern University,2.4,35,787.0830000000002,Large,MW,1.202
+2.3,Pennsylvania State University,2.3,28,789.677,Small,NE,2.582
+2.3,Texas A&M University--College Station,2.3,36,774.6,Large,SC,1.311
+2.2,State University of New York--Stony Brook,2.2,33,795.5169999999998,Large,NE,2.552
+2.2,Indiana University--Bloomington,2.2,35,764.737,Large,MW,1.482
+2.2,Duke University,2.2,22,800.0,Small,SA,2.9760000000000004
+2.2,Rice University,2.2,18,800.0,Small,SC,2.29
+2.1,University of Utah,2.1,29,776.4069999999998,Small,W,1.643
+2.1,Johns Hopkins University,2.1,24,766.385,Small,SA,2.326
+2.0,University of Chicago,2.0,28,779.2589999999999,Small,MW,2.412
+1.9,University of California--Irvine,1.9,28,787.304,Small,W,2.074
+1.6,Boston University,1.6,15,782.5,Small,NE,2.331
+1.6,University of Colorado--Boulder,1.6,32,761.1110000000001,Large,W,1.329
+1.6,University of North Carolina--Chapel Hill,1.6,22,794.342,Small,SA,1.833
+1.6,Dartmouth College,1.6,18,793.846,Small,NE,1.807
+1.5,Yale University,1.5,18,800.0,Small,NE,2.027
+1.5,University of Virginia,1.5,18,788.538,Small,SA,1.83
+1.5,University of Rochester,1.5,18,786.0260000000002,Small,NE,2.652
+1.4,Arizona State University,1.4,14,787.164,Small,W,2.1
+1.4,University of Arizona,1.4,18,784.118,Small,W,2.011
+1.4,Virginia Polytechnic Institute and State University,1.4,32,780.0,Large,SA,1.389
+1.4,Washington University in St. Louis,1.4,17,790.0,Small,MW,1.722

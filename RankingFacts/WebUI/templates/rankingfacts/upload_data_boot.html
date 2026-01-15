@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+<meta name="description" content="Upload your data">
+<link href="{% static 'icons/frontpage/favicon.ico' %}" rel="shortcut icon"/>
+<link href="{% static 'bootstrap/css/bootstrap.min-4.0.0.css' %}" rel="stylesheet">
+<link href="{% static 'css/rf-modern.css' %}" rel="stylesheet">
+<link href="{% static 'bootstrap-fileinput/css/fileinput.min.css' %}" rel="stylesheet" type="text/css"/>
+<link href="{% static 'bootstrap-fileinput/themes/explorer-fa/theme.css' %}" rel="stylesheet" type="text/css"/>
+<link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+<style>
+    body { background: var(--rf-bg); color: var(--rf-text); }
+    .page-header { font-weight: 800; color: var(--rf-text); }
+    .feature-icon { width: 40px; height: 40px; border-radius: 10px; background: #eef4ff; color: var(--rf-primary); display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 10px; }
+    .upload-hero { max-width: 760px; }
+    .upload-help { background: #f7f9fe; border-radius: 12px; padding: 14px; border: 1px solid var(--rf-border); }
+</style>
+</head>
+<body>
+<nav class="rf-navbar">
+    <div class="container">
+        <div class="rf-navbar-inner">
+            <a class="navbar-brand" href="{% url 'rankingfacts:base' %}">
+                <span class="rf-badge">RF</span>
+                <span class="rf-brand-text">Ranking Facts</span>
+            </a>
+            <div class="rf-nav-links">
+                <a class="rf-nav-link" href="https://dataresponsibly.github.io/">About</a>
+                <a class="rf-nav-link" href="https://dataresponsibly.github.io/people/">Contact</a>
+                <a class="rf-nav-link" href="https://github.com/DataResponsibly/RankingFacts">Code</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="padding: 48px 15px;">
+    <div class="row mb-5">
+        <div class="col-lg-8 upload-hero">
+            <h3 class="page-header mb-3">Upload your CSV</h3>
+            <p class="text-muted mb-0">We keep all ranking, fairness, and labeling logic identical—this is purely a cleaner, clearer experience.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="rf-card h-100" style="padding: 28px;">
+                <div class="rf-small-heading mb-3">CHOOSE A PATH</div>
+                <div class="list-group mb-4" id="mode_choose" style="gap: 8px;">
+                    <a class="list-group-item list-group-item-action active" href="{% url 'rankingfacts:upload_data'%}" style="padding: 12px 16px; border-radius: 8px;"><i class="fa fa-file-text-o fa-fw"></i> Upload a file</a>
+                    <a class="list-group-item list-group-item-action" href="{% url 'rankingfacts:sample_data' %}" style="padding: 12px 16px; border-radius: 8px;"><i class="fa fa-table fa-fw"></i> Try our samples</a>
+                </div>
+                <div class="upload-help">
+                    <div class="d-flex">
+                        <div class="feature-icon"><i class="fa fa-info"></i></div>
+                        <div>
+                            <div class="font-weight-bold mb-1">Need an example?</div>
+                            <div class="text-muted small">Download a sample CSV <a href="{% static 'metadata/CSranking_faculty30.csv' %}">here</a> to see the expected format.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="rf-card" style="padding: 32px;">
+                <h5 class="mb-3">Select a .csv file</h5>
+                <p class="rf-muted small mb-4">Numeric columns can be scored; categorical/binary can be used as sensitive attributes. Max 50MB.</p>
+                <form style="margin-bottom: 24px;" method="post" enctype="multipart/form-data">{% csrf_token %}
+                    <input id="file_upload" name="user_upload_data" class="file" type="file" accept="text/csv">
+                </form>
+                <div class="rf-alert">
+                    <div class="font-weight-bold mb-2">Your data, unchanged</div>
+                    <div class="rf-muted small mb-0">Upload only prepares it for scoring and fairness analysis—no mutation, no sharing.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="py-4 bg-white border-top">
+  <div class="container">
+    <p class="m-0 text-center text-muted">
+        © 2018 <a href="https://dataresponsibly.github.io/">Data Responsibly</a> | <a href="https://github.com/DataResponsibly/RankingFacts">Code</a>  | <a href="https://dataresponsibly.github.io/people/">Contact us</a>
+    </p>
+  </div>
+</footer>
+
+<script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'ajax/js/popper.min-1.11.0.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min-4.0.0.js' %}"></script>
+<script src="{% static 'bootstrap-fileinput/js/fileinput.min.js' %}"></script>
+<script src="{% static 'bootstrap-fileinput/themes/explorer-fa/theme.js' %}"></script>
+<script src="{% static 'bootstrap-fileinput/themes/fa/theme.js' %}"></script>
+<script>
+    $(function(){
+        $("#file_upload").fileinput({
+            theme: 'fa',
+            allowedFileExtensions: ['csv'],
+            overwriteInitial: false,
+            maxFileSize: 50000,
+            maxFilesNum: 1
+        });
+    });
+</script>
+</body>
+</html>

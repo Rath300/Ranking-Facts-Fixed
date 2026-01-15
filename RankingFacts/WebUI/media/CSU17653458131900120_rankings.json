@@ -1,0 +1,34 @@
+{
+    "att0": {
+        "weight": 1.0,
+        "rank": "Average Count_unchecked",
+        "order": "higher"
+    },
+    "att1": {
+        "weight": 1.0,
+        "rank": "Faculty_unchecked",
+        "order": "higher"
+    },
+    "att2": {
+        "weight": 1.0,
+        "rank": "GRE_unchecked",
+        "order": "higher"
+    },
+    "att3": {
+        "weight": 1.0,
+        "rank": "Pub Count",
+        "order": "higher"
+    },
+    "ranked_atts": [
+        "Pub Count"
+    ],
+    "ranked_atts_weight": [
+        1.0
+    ],
+    "checked_sensi_atts": [
+        "Department Size"
+    ],
+    "checked_cate_atts": [
+        "College Name"
+    ]
+}

@@ -1,0 +1,39 @@
+{
+    "att0": {
+        "weight": 1.0,
+        "rank": "age_unchecked",
+        "order": "higher"
+    },
+    "att1": {
+        "weight": 1.0,
+        "rank": "decile_score_unchecked",
+        "order": "higher"
+    },
+    "att2": {
+        "weight": 1.0,
+        "rank": "priors_count_unchecked",
+        "order": "higher"
+    },
+    "att3": {
+        "weight": "1",
+        "rank": "is_violent_recid",
+        "order": "higher"
+    },
+    "att4": {
+        "weight": 1.0,
+        "rank": "v_decile_score_unchecked",
+        "order": "higher"
+    },
+    "ranked_atts": [
+        "is_violent_recid"
+    ],
+    "ranked_atts_weight": [
+        1.0
+    ],
+    "checked_sensi_atts": [
+        "sex"
+    ],
+    "checked_cate_atts": [
+        "r_charge_degree"
+    ]
+}
