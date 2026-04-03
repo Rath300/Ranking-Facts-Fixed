@@ -1,0 +1,306 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Features — GeneRank Fairness</title>
+  <link rel="stylesheet" href="{% static 'css/gene-theme.css' %}">
+  <!-- Tom Select -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css">
+  <style>
+    .page-layout {
+      min-height: calc(100vh - 60px);
+      background: var(--rf-bg);
+      padding: 40px 24px 64px;
+    }
+    .page-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .dataset-banner {
+      background: var(--rf-navy);
+      border-radius: var(--rf-radius-lg);
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .dataset-banner-icon {
+      font-size: 1.5rem;
+    }
+    .dataset-banner-info { flex: 1; }
+    .dataset-banner-name { color: white; font-weight: 600; font-size: 0.95rem; }
+    .dataset-banner-meta { color: rgba(255,255,255,0.55); font-size: 0.8rem; margin-top: 2px; }
+    .dataset-banner-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .banner-stat { text-align: center; }
+    .banner-stat-val { color: white; font-size: 1.2rem; font-weight: 700; line-height: 1; }
+    .banner-stat-lbl { color: rgba(255,255,255,0.5); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+    .default-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0;
+    }
+    .default-chip {
+      background: var(--rf-orange-light);
+      border: 1px solid #FBCDB8;
+      color: var(--rf-orange);
+      border-radius: var(--rf-radius-pill);
+      padding: 3px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .selected-count-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .selected-count-num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--rf-navy);
+      line-height: 1;
+    }
+    .selected-count-label {
+      font-size: 0.75rem;
+      color: var(--rf-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+    .error-alert {
+      background: var(--rf-red-bg);
+      border: 1px solid #FECACA;
+      border-left: 4px solid var(--rf-red);
+      border-radius: var(--rf-radius);
+      padding: 12px 16px;
+      font-size: 0.875rem;
+      color: var(--rf-red);
+      margin-bottom: 16px;
+    }
+    .ts-wrapper .ts-control { min-height: 52px !important; }
+    /* Override Tom Select to load our own styles */
+    .ts-wrapper.plugin-remove_button .item .remove { border-left-color: #C5D3E0 !important; }
+  </style>
+</head>
+<body>
+
+<nav class="rf-nav">
+  <a href="{% url 'rankingfacts:base' %}" class="rf-nav-brand">
+    <div class="rf-nav-brand-icon">G</div>
+    <span class="rf-nav-brand-text">GeneRank <span>Fairness</span></span>
+  </a>
+  <div class="rf-nav-actions">
+    <a href="{% url 'rankingfacts:upload_data' %}" class="rf-nav-link">&larr; Re-upload</a>
+  </div>
+</nav>
+
+<div class="page-layout">
+  <div class="page-wrapper">
+
+    <!-- Breadcrumb -->
+    <div class="rf-breadcrumb">
+      <a href="{% url 'rankingfacts:base' %}" style="color:var(--rf-text-muted);">Home</a>
+      <span class="rf-breadcrumb-sep">›</span>
+      <a href="{% url 'rankingfacts:upload_data' %}" style="color:var(--rf-text-muted);">Upload</a>
+      <span class="rf-breadcrumb-sep">›</span>
+      <span class="rf-breadcrumb-active">Select Features</span>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <h2 style="margin-bottom:6px;">Select gene features to analyze</h2>
+      <p style="color:var(--rf-text-muted); margin:0; font-size:0.9rem;">
+        Choose which binary feature columns to test for fairness. We've pre-selected 5 recommended defaults covering key biological categories.
+      </p>
+    </div>
+
+    <!-- Dataset banner -->
+    <div class="dataset-banner">
+      <div class="dataset-banner-icon">&#129516;</div>
+      <div class="dataset-banner-info">
+        <div class="dataset-banner-name">{{ file_label }}</div>
+        <div class="dataset-banner-meta">Dataset loaded and ready for analysis</div>
+      </div>
+      <div class="dataset-banner-stats">
+        <div class="banner-stat">
+          <div class="banner-stat-val">{{ total_genes }}</div>
+          <div class="banner-stat-lbl">Genes</div>
+        </div>
+        <div class="banner-stat">
+          <div class="banner-stat-val">{{ total_binary_cols }}</div>
+          <div class="banner-stat-lbl">Binary Features</div>
+        </div>
+      </div>
+    </div>
+
+    {% if error %}
+    <div class="error-alert">&#9888; {{ error }}</div>
+    {% endif %}
+
+    <div class="rf-card">
+      <div class="rf-card-header">
+        <h4>Feature Selection</h4>
+        <div class="flex items-center gap-12">
+          <div>
+            <div class="selected-count-num" id="selected-count">5</div>
+            <div class="selected-count-label">selected</div>
+          </div>
+          <button type="button" class="btn-rf-outline-orange btn-sm" id="reset-defaults-btn">
+            Reset to defaults
+          </button>
+          <button type="button" class="btn-rf-secondary btn-sm" id="clear-all-btn">
+            Clear all
+          </button>
+        </div>
+      </div>
+      <div class="rf-card-body">
+
+        <!-- Recommended defaults preview -->
+        <div style="margin-bottom:20px;">
+          <div style="font-size:0.78rem; font-weight:600; color:var(--rf-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;">
+            Recommended defaults (pre-selected)
+          </div>
+          <div class="default-chips">
+            {% for col in cols_with_meta %}{% if col.is_default %}
+            <span class="default-chip">&#10003; {{ col.label }}</span>
+            {% endif %}{% endfor %}
+          </div>
+        </div>
+
+        <div class="divider" style="margin: 16px 0;"></div>
+
+        <!-- The multi-select form -->
+        <form method="post" id="feature-form">
+          {% csrf_token %}
+
+          <div style="margin-bottom:8px;">
+            <label style="font-size:0.875rem; font-weight:600; color:var(--rf-navy);">
+              Search and select features
+            </label>
+            <div style="font-size:0.78rem; color:var(--rf-text-muted); margin-top:3px;">
+              Type to search by feature name or study. All {{ total_binary_cols }} binary columns available.
+            </div>
+          </div>
+
+          <select id="feature-select" name="selected_features" multiple placeholder="Search features...">
+            {% for col in cols_with_meta %}
+            <option value="{{ col.name }}"{% if col.is_default %} selected{% endif %}>{{ col.label }} — {{ col.name }}</option>
+            {% endfor %}
+          </select>
+
+          <div style="margin-top: 24px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <button type="submit" class="btn-rf-primary" id="run-btn" style="flex:1; justify-content:center; min-width:200px;">
+              Run Fairness Analysis &rarr;
+            </button>
+            <a href="{% url 'rankingfacts:upload_data' %}" class="btn-rf-secondary btn-sm">
+              &larr; Change Dataset
+            </a>
+          </div>
+        </form>
+
+      </div>
+      <div class="rf-card-footer">
+        Fairness will be run for each selected feature group (value=0 vs value=1) using FA*IR, Pairwise, and Proportion z-test oracles at &alpha; = 0.05.
+      </div>
+    </div>
+
+    <!-- Oracle reminder -->
+    <div class="rf-card" style="margin-top:20px;">
+      <div class="rf-card-header">
+        <h4>About the fairness oracles</h4>
+      </div>
+      <div class="rf-card-body">
+        <div class="rf-oracle-legend">
+          <div class="rf-oracle-item">
+            <div class="rf-oracle-dot rf-oracle-dot-orange"></div>
+            <div>
+              <div class="rf-oracle-name">FA*IR</div>
+              <div class="rf-oracle-desc">Tests group representation at every ranking prefix using binomial CDF with Bonferroni-corrected alpha.</div>
+            </div>
+          </div>
+          <div class="rf-oracle-item">
+            <div class="rf-oracle-dot rf-oracle-dot-navy"></div>
+            <div>
+              <div class="rf-oracle-name">Pairwise</div>
+              <div class="rf-oracle-desc">Compares concordant pair count to a simulation distribution. Returns NA when simulation data is unavailable.</div>
+            </div>
+          </div>
+          <div class="rf-oracle-item">
+            <div class="rf-oracle-dot rf-oracle-dot-fair"></div>
+            <div>
+              <div class="rf-oracle-name">Proportion z-test</div>
+              <div class="rf-oracle-desc">Two-proportion z-test comparing top-K group representation to overall dataset proportions.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script>
+  const defaultFeatures = {{ default_features_json|safe }};
+
+  const ts = new TomSelect('#feature-select', {
+    plugins: ['remove_button', 'clear_button'],
+    maxOptions: 500,
+    placeholder: 'Search features...',
+    render: {
+      option: function(data, escape) {
+        const parts = data.text.split(' — ');
+        const label = parts[0];
+        const fullName = parts.length > 1 ? parts.slice(1).join(' — ') : '';
+        return `<div style="padding:8px 14px;">
+          <div style="font-weight:500;color:#1A2332;">${escape(label)}</div>
+          ${fullName ? `<div style="font-size:0.72rem;color:#6B7280;margin-top:1px;">${escape(fullName)}</div>` : ''}
+        </div>`;
+      },
+      item: function(data, escape) {
+        const label = data.text.split(' — ')[0];
+        return `<div title="${escape(data.value)}">${escape(label)}</div>`;
+      }
+    },
+    onItemAdd: updateCount,
+    onItemRemove: updateCount,
+  });
+
+  function updateCount() {
+    const count = ts.getValue().length;
+    document.getElementById('selected-count').textContent = count;
+    const btn = document.getElementById('run-btn');
+    btn.disabled = count === 0;
+    btn.style.opacity = count === 0 ? '0.4' : '1';
+    btn.style.cursor = count === 0 ? 'not-allowed' : 'pointer';
+  }
+
+  document.getElementById('reset-defaults-btn').addEventListener('click', () => {
+    ts.clear(true);
+    defaultFeatures.forEach(f => ts.addItem(f, true));
+    ts.refreshItems();
+    updateCount();
+  });
+
+  document.getElementById('clear-all-btn').addEventListener('click', () => {
+    ts.clear();
+    updateCount();
+  });
+
+  // Initial count
+  updateCount();
+</script>
+
+</body>
+</html>

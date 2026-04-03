@@ -6,7 +6,7 @@ import pandas as pd
 from scipy.stats import norm
 from sklearn import linear_model
 from math import sqrt
-from DataSynthesizer.lib.utils import read_json_file
+from rankingfacts.utils import read_json_file
 from FAIR.FairnessInRankings import FairnessInRankingsTester
 
 def save_uploaded_file(file, current_file):

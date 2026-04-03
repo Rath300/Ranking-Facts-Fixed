@@ -3,10 +3,12 @@
   --rf-surface: #ffffff;
   --rf-border: #e6e8ee;
   --rf-border-strong: #d5d8e0;
-  --rf-primary: #1c63d5;
-  --rf-primary-strong: #124a9f;
-  --rf-accent: #4db6ff;
-  --rf-text: #1f2a44;
+  --rf-primary: #F15A22;
+  --rf-primary-strong: #d14916;
+  --rf-accent: #FF7F50;
+  --rf-secondary: #0C2340;
+  --rf-secondary-strong: #081829;
+  --rf-text: #0C2340;
   --rf-muted: #5b6c86;
   --rf-radius: 12px;
   --rf-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
@@ -24,6 +26,64 @@ body {
   line-height: 1.6;
 }
 
+.rf-page {
+  padding: 32px 0 56px;
+  max-width: 1400px;
+}
+
+.rf-page .rf-section + .rf-section {
+  margin-top: var(--rf-spacing-4);
+}
+
+.rf-page-header {
+  margin-bottom: 24px;
+}
+
+.rf-section-card {
+  background: var(--rf-surface);
+  border: 1px solid var(--rf-border);
+  border-radius: var(--rf-radius);
+  box-shadow: var(--rf-shadow);
+  padding: var(--rf-spacing-4);
+  margin-bottom: var(--rf-spacing-4);
+}
+
+.rf-section-muted {
+  background: #f8fafc;
+  border: 1px solid var(--rf-border);
+  border-radius: var(--rf-radius);
+  padding: var(--rf-spacing-4);
+  margin-bottom: var(--rf-spacing-4);
+}
+
+.rf-table-wrap {
+  background: #fff;
+  border: 1px solid var(--rf-border);
+  border-radius: var(--rf-radius);
+  padding: var(--rf-spacing-2);
+}
+
+.rf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rf-spacing-3);
+  margin-top: var(--rf-spacing-4);
+}
+
+.rf-actions-end {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--rf-spacing-2);
+  justify-content: flex-end;
+}
+
+.page-header {
+  border-bottom: none;
+  margin: 0 0 var(--rf-spacing-2);
+}
+
 a {
   color: var(--rf-primary);
 }
@@ -33,7 +93,7 @@ a:hover, a:focus {
 }
 
 .rf-navbar {
-  background: var(--rf-surface);
+  background: var(--rf-secondary);
   border-bottom: 1px solid var(--rf-border);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
   padding: 14px 0;
@@ -53,9 +113,11 @@ a:hover, a:focus {
   padding: 0;
   margin: 0;
   flex-shrink: 0;
+  color: white;
 }
 .rf-navbar .navbar-brand:hover {
   text-decoration: none;
+  color: white;
 }
 
 .rf-nav-links {
@@ -66,7 +128,7 @@ a:hover, a:focus {
 }
 
 .rf-nav-link {
-  color: var(--rf-text);
+  color: white;
   font-size: 15px;
   font-weight: 400;
   text-decoration: none;
@@ -89,10 +151,10 @@ a:hover, a:focus {
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  border: 1px solid var(--rf-border);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  background: var(--rf-surface);
-  color: var(--rf-text);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   font-weight: 500;
   font-size: 14px;
   text-decoration: none;
@@ -101,13 +163,13 @@ a:hover, a:focus {
 .rf-data-tab:hover {
   border-color: var(--rf-primary);
   color: var(--rf-primary);
-  background: #eef4ff;
+  background: white;
   text-decoration: none;
 }
 .rf-data-tab.active {
   border-color: var(--rf-primary);
   color: var(--rf-primary);
-  background: #eef4ff;
+  background: white;
 }
 
 .rf-badge {
@@ -128,7 +190,7 @@ a:hover, a:focus {
 .rf-brand-text {
   font-weight: 700;
   font-size: 18px;
-  color: var(--rf-text);
+  color: white;
   line-height: 1;
   margin: 0;
 }
@@ -493,21 +555,74 @@ table.dataTable {
   background: #fff;
 }
 
+.rf-chart {
+  width: 100%;
+  min-height: 400px;
+  height: auto !important;
+}
+
+.rf-chart .highcharts-container {
+  width: 100% !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.rf-chart .highcharts-root {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+.panel-body {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: unset !important;
+  max-height: none !important;
+}
+
 .panel {
   border: 1px solid var(--rf-border);
   border-radius: var(--rf-radius);
   box-shadow: var(--rf-shadow);
+  overflow: visible !important;
+  height: auto !important;
 }
 .panel-heading {
-  background: #f4f7fb !important;
+  background: var(--rf-secondary) !important;
   border-bottom: 1px solid var(--rf-border);
   font-weight: 700;
-  color: var(--rf-text);
+  color: white !important;
   padding: var(--rf-spacing-3) var(--rf-spacing-4);
+}
+
+.panel-heading h3,
+.panel-heading h4 {
+  color: white !important;
+  margin: 0;
+}
+
+.panel-heading a {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.panel-heading a:hover {
+  color: var(--rf-primary) !important;
+}
+
+.panel-success > .panel-heading,
+.panel-info > .panel-heading,
+.panel-warning > .panel-heading,
+.panel-primary > .panel-heading,
+.panel-green > .panel-heading,
+.panel-yellow > .panel-heading {
+  background: var(--rf-secondary) !important;
+  border-color: var(--rf-border) !important;
+  color: white !important;
 }
 .panel-body {
   background: #fff;
   padding: var(--rf-spacing-4);
+  overflow: visible !important;
+  height: auto !important;
 }
 .panel-footer {
   background: #fafbfe;
@@ -520,6 +635,65 @@ table.dataTable {
 input,
 select {
   background: #fff;
+}
+
+/* Checkbox layout - compact modern style */
+#sensi_checkboxes .row,
+#cate_checkboxes .row,
+#rank_checkboxes .row {
+  gap: 8px;
+  row-gap: 4px;
+}
+
+#sensi_checkboxes .col-lg-4,
+#cate_checkboxes .col-lg-4 {
+  padding: 4px 8px;
+  margin-bottom: 8px;
+}
+
+#sensi_checkboxes label.list-group-item,
+#cate_checkboxes label.list-group-item,
+#rank_checkboxes label.list-group-item {
+  border: 1px solid var(--rf-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 180ms ease;
+  background: white;
+  font-weight: 500;
+}
+
+#sensi_checkboxes label.list-group-item:hover,
+#cate_checkboxes label.list-group-item:hover,
+#rank_checkboxes label.list-group-item:hover {
+  border-color: var(--rf-primary);
+  background: #fff5f0;
+}
+
+#sensi_checkboxes input[type="checkbox"],
+#cate_checkboxes input[type="checkbox"],
+#rank_checkboxes input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--rf-primary);
+}
+
+/* Tighten section spacing on parameter pages */
+.rf-section-muted + .row {
+  margin-top: 0;
+}
+
+/* Remove excessive vertical spacing */
+.visible-sm span br,
+.visible-xs span br,
+.visible-md span br,
+.visible-lg span br {
+  display: none;
 }
 
 /* List group overrides */
@@ -542,6 +716,51 @@ select {
   background: #eef4ff;
   border-color: var(--rf-primary);
   color: var(--rf-primary);
+}
+
+/* Force all charts to show fully - FUNCTIONALITY PRIORITY */
+div[id*="container"],
+div[id*="_pie"],
+div[id*="scatter"],
+div[id*="chart"],
+div[id*="_barchart"],
+div[id*="_histogram"],
+#score_scatter {
+  height: auto !important;
+  min-height: 450px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  width: 100% !important;
+}
+
+svg.highcharts-root {
+  height: auto !important;
+  min-height: 450px !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.highcharts-container,
+.highcharts-container svg {
+  height: auto !important;
+  min-height: 450px !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Ensure chart parent containers don't constrain */
+.row {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* Only apply min-height to panels with charts, not empty divs */
+.panel {
+  min-height: auto !important;
+}
+
+.panel .panel-body:has(.rf-chart) {
+  min-height: 500px !important;
 }
 
 /* Responsive helpers */

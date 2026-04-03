@@ -2,102 +2,395 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="{% static 'icons/frontpage/favicon.ico' %}" rel="shortcut icon">
-    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/rf-modern.css' %}" rel="stylesheet">
-    <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeneRank Fairness — Fairness Analysis for Gene Rankings</title>
+  <link rel="stylesheet" href="{% static 'css/gene-theme.css' %}">
+  <style>
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 60px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-preview {
+      background: white;
+      border: 1px solid var(--rf-border);
+      border-radius: var(--rf-radius-lg);
+      box-shadow: var(--rf-shadow-md);
+      overflow: hidden;
+    }
+    .hero-preview-header {
+      background: var(--rf-navy);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; }
+    .dot-y { background: #FEBC2E; }
+    .dot-g { background: #28C840; }
+    .hero-preview-body { padding: 16px; }
+    .preview-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--rf-border-light);
+      font-size: 0.8rem;
+    }
+    .preview-row:last-child { border-bottom: none; }
+    .preview-rank { width: 24px; text-align: right; color: var(--rf-text-muted); font-weight: 600; font-size: 0.72rem; }
+    .preview-gene { font-weight: 700; color: var(--rf-navy); width: 56px; font-size: 0.82rem; }
+    .preview-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+    .preview-fair   { background: var(--rf-green-bg);  color: var(--rf-green); border-radius: 99px; padding: 1px 7px; font-size: 0.7rem; font-weight: 600; border: 1px solid #BBF7D0; }
+    .preview-unfair { background: var(--rf-red-bg);    color: var(--rf-red);   border-radius: 99px; padding: 1px 7px; font-size: 0.7rem; font-weight: 600; border: 1px solid #FECACA; }
+    .preview-na     { background: var(--rf-grey-bg);   color: var(--rf-grey);  border-radius: 99px; padding: 1px 7px; font-size: 0.7rem; font-weight: 600; border: 1px solid #E5E7EB; }
+    .preview-label  { font-size: 0.7rem; color: var(--rf-text-muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .section-bg-white  { background: var(--rf-white); }
+    .section-bg-light  { background: var(--rf-bg); }
+    .section { padding: 72px 24px; }
+    .section-sm { padding: 48px 24px; }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .oracle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .oracle-card {
+      background: white;
+      border: 1px solid var(--rf-border);
+      border-radius: var(--rf-radius-lg);
+      padding: 24px;
+    }
+    .oracle-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: var(--rf-radius-pill);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .oracle-badge-1 { background: var(--rf-orange-light); color: var(--rf-orange); }
+    .oracle-badge-2 { background: var(--rf-navy-light);   color: var(--rf-navy); }
+    .oracle-badge-3 { background: var(--rf-green-bg);     color: var(--rf-green); }
+    .steps-section { background: var(--rf-navy); padding: 64px 24px; }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      max-width: 820px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 80px;
+      right: 80px;
+      height: 2px;
+      background: rgba(255,255,255,0.15);
+    }
+    .step-item {
+      text-align: center;
+      padding: 0 16px;
+      position: relative;
+    }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--rf-orange);
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 0 5px rgba(241,90,34,0.2);
+      position: relative;
+      z-index: 1;
+    }
+    .step-title { color: white; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
+    .step-desc  { color: rgba(255,255,255,0.6); font-size: 0.82rem; line-height: 1.55; }
+    .rf-footer {
+      background: var(--rf-navy);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .rf-footer-text { color: rgba(255,255,255,0.5); font-size: 0.8rem; }
+    .rf-footer-text a { color: rgba(255,255,255,0.7); }
+    .alpha-pill {
+      background: var(--rf-orange-light);
+      color: var(--rf-orange);
+      border: 1px solid #FBCDB8;
+      border-radius: var(--rf-radius-pill);
+      padding: 2px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: monospace;
+    }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-preview { display: none; }
+      .feature-grid, .oracle-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; gap: 28px; }
+      .steps-grid::before { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <nav class="rf-navbar">
-        <div class="container">
-            <div class="rf-navbar-inner">
-                <a class="navbar-brand" href="{% url 'rankingfacts:base' %}">
-                    <span class="rf-badge">RF</span>
-                    <span class="rf-brand-text">Ranking Facts</span>
-                </a>
-                <div class="rf-nav-links">
-                    <a class="rf-nav-link" href="https://dataresponsibly.github.io/">About</a>
-                    <a class="rf-nav-link" href="https://dataresponsibly.github.io/people/">Contact</a>
-                    <a class="rf-nav-link" href="https://github.com/DataResponsibly/RankingFacts">Code</a>
-                </div>
-            </div>
+
+<!-- Navigation -->
+<nav class="rf-nav">
+  <a href="{% url 'rankingfacts:base' %}" class="rf-nav-brand">
+    <div class="rf-nav-brand-icon">G</div>
+    <span class="rf-nav-brand-text">GeneRank <span>Fairness</span></span>
+  </a>
+  <div class="rf-nav-actions">
+    <a href="#how-it-works" class="rf-nav-link">How it works</a>
+    <a href="#oracles" class="rf-nav-link">Fairness Oracles</a>
+    <a href="{% url 'rankingfacts:upload_data' %}" class="btn-rf-primary btn-sm">
+      Analyze Dataset &rarr;
+    </a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="rf-hero">
+  <div class="hero-grid">
+    <div>
+      <div class="rf-hero-eyebrow">Research Tool &nbsp;&bull;&nbsp; Gene Ranking Fairness</div>
+      <h1 class="rf-hero-title">
+        Fairness Analysis<br>for <span>Gene Rankings</span>
+      </h1>
+      <p class="rf-hero-subtitle">
+        Upload a pre-ranked gene dataset, select biological features of interest,
+        and run three statistical fairness oracles to determine whether your ranking
+        treats gene groups equitably.
+      </p>
+      <div class="rf-hero-actions">
+        <a href="{% url 'rankingfacts:upload_data' %}" class="btn-rf-primary">
+          &#8679; Upload Gene CSV
+        </a>
+        <a href="{% url 'rankingfacts:upload_data' %}" class="btn-rf-secondary">
+          Try Sample Dataset
+        </a>
+      </div>
+      <div style="margin-top:28px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <div style="font-size:0.78rem; color:var(--rf-text-muted);">
+          <strong style="color:var(--rf-navy);">3</strong> fairness oracles
         </div>
-    </nav>
-
-    <main class="container rf-hero">
-        <div class="row align-items-center" style="margin-bottom: 64px;">
-            <div class="col-lg-6">
-                <div class="rf-pill mb-3">Transparent, fair, and explainable rankings</div>
-                <h1 class="rf-hero-title mb-3">Generate a nutritional label for your ranking in minutes.</h1>
-                <p class="rf-hero-subtitle mb-4">Upload a CSV, pick your scoring attributes, and inspect fairness, stability, and diversity with an easy-to-read label. No changes to your data or logic—just a clearer experience.</p>
-                <div class="rf-hero-cta mb-3">
-                    <a class="rf-btn rf-btn-primary" href="{% url 'rankingfacts:upload_data' %}">Upload your data</a>
-                    <a class="rf-btn rf-btn-secondary" href="{% url 'rankingfacts:sample_data' %}">Try our sample datasets</a>
-                </div>
-                <div class="text-muted small">We support numeric, categorical, and binary columns. CSV only.</div>
-            </div>
-            <div class="col-lg-5 offset-lg-1 mt-5 mt-lg-0">
-                <div class="rf-card">
-                    <div class="rf-small-heading mb-3">HOW IT WORKS</div>
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        <div class="rf-step">
-                            <div class="rf-step-number">1</div>
-                            <div class="rf-step-body">
-                                <div class="font-weight-bold mb-1">Load data</div>
-                                <div class="rf-muted">Upload a CSV or pick a sample dataset.</div>
-                            </div>
-                        </div>
-                        <div class="rf-step">
-                            <div class="rf-step-number">2</div>
-                            <div class="rf-step-body">
-                                <div class="font-weight-bold mb-1">Set parameters</div>
-                                <div class="rf-muted">Choose scoring attributes, weights, and sensitive features.</div>
-                            </div>
-                        </div>
-                        <div class="rf-step">
-                            <div class="rf-step-number">3</div>
-                            <div class="rf-step-body">
-                                <div class="font-weight-bold mb-1">Review the label</div>
-                                <div class="rf-muted">See stability, correlation, diversity, and fairness results.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rf-alert mt-4">
-                        <div class="font-weight-bold mb-1">Privacy-friendly</div>
-                        <div class="rf-muted small">Your data stays in this session. We don't alter or share it.</div>
-                    </div>
-                </div>
-            </div>
+        <div style="color:var(--rf-border);">|</div>
+        <div style="font-size:0.78rem; color:var(--rf-text-muted);">
+          <strong style="color:var(--rf-navy);">435+</strong> binary features supported
         </div>
-
-        <section class="rf-section">
-            <h4 class="rf-section-title mb-4">Why Ranking Facts?</h4>
-            <div class="rf-grid-3">
-                <div class="rf-card-quiet">
-                    <div class="font-weight-bold mb-2">Explainability</div>
-                    <div class="rf-muted">Summaries and correlations show which attributes drive scores.</div>
-                </div>
-                <div class="rf-card-quiet">
-                    <div class="font-weight-bold mb-2">Fairness checks</div>
-                    <div class="rf-muted">FA*IR, Pairwise, and Proportion oracles validate sensitive groups.</div>
-                </div>
-                <div class="rf-card-quiet">
-                    <div class="font-weight-bold mb-2">Stability</div>
-                    <div class="rf-muted">Slope diagnostics highlight whether small changes disrupt top rankings.</div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="rf-footer">
-        <div class="container text-center">
-            © 2018 <a href="https://dataresponsibly.github.io/">Data Responsibly</a> | <a href="https://github.com/DataResponsibly/RankingFacts">Code</a> | <a href="https://dataresponsibly.github.io/people/">Contact us</a>
+        <div style="color:var(--rf-border);">|</div>
+        <div style="font-size:0.78rem; color:var(--rf-text-muted);">
+          Significance level <span class="alpha-pill">&alpha; = 0.05</span>
         </div>
-    </footer>
+      </div>
+    </div>
 
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- Preview widget -->
+    <div class="hero-preview">
+      <div class="hero-preview-header">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span style="color:rgba(255,255,255,0.6); font-size:0.75rem; margin-left:8px;">Fairness Analysis</span>
+      </div>
+      <div class="hero-preview-body">
+        <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--rf-text-muted); margin-bottom:8px;">Feature &rarr; Oracle Results</div>
+        <div class="preview-row">
+          <div class="preview-label">LoF Intolerant (pLI)</div>
+          <div class="preview-badges">
+            <span class="preview-fair">FAIR</span>
+            <span class="preview-na">NA</span>
+            <span class="preview-fair">FAIR</span>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div class="preview-label">Plasma Membrane Protein</div>
+          <div class="preview-badges">
+            <span class="preview-unfair">UNFAIR</span>
+            <span class="preview-na">NA</span>
+            <span class="preview-unfair">UNFAIR</span>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div class="preview-label">Essential in HeLa (Cancer)</div>
+          <div class="preview-badges">
+            <span class="preview-fair">FAIR</span>
+            <span class="preview-na">NA</span>
+            <span class="preview-fair">FAIR</span>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div class="preview-label">Expressed in Liver</div>
+          <div class="preview-badges">
+            <span class="preview-fair">FAIR</span>
+            <span class="preview-na">NA</span>
+            <span class="preview-unfair">UNFAIR</span>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div class="preview-label">Long RNA Half-Life</div>
+          <div class="preview-badges">
+            <span class="preview-fair">FAIR</span>
+            <span class="preview-na">NA</span>
+            <span class="preview-fair">FAIR</span>
+          </div>
+        </div>
+        <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--rf-border-light); display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="preview-fair">FA*IR</span>
+          <span style="font-size:0.7rem; color:var(--rf-text-muted);">Pairwise</span>
+          <span style="font-size:0.7rem; color:var(--rf-text-muted);">Proportion z-test</span>
+          <span style="font-size:0.7rem; color:var(--rf-text-muted); margin-left:auto;">&alpha; = 0.05</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it Works -->
+<section class="steps-section" id="how-it-works">
+  <div style="text-align:center; margin-bottom:48px;">
+    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--rf-orange); margin-bottom:10px;">Workflow</div>
+    <h2 style="color:white; margin:0; font-size:1.75rem;">How it works</h2>
+    <p style="color:rgba(255,255,255,0.55); margin-top:10px; font-size:0.9rem;">Three steps from raw data to fairness insights</p>
+  </div>
+  <div class="steps-grid">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-title">Upload Your Gene CSV</div>
+      <div class="step-desc">Provide a CSV where rows are genes in pre-ranked order (rank 1 = first row). Include binary feature columns and a <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;font-size:0.78rem;">Gene_Name</code> column.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-title">Select Gene Features</div>
+      <div class="step-desc">Choose which binary gene features to analyze for fairness. We pre-load 5 recommended defaults covering variation constraint, localization, essentiality, expression, and RNA stability.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-title">Run Fairness Analysis</div>
+      <div class="step-desc">Three statistical oracles (FA*IR, Pairwise, Proportion z-test) run across all selected features, producing a clear fair/unfair verdict with p-values for each.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Cards -->
+<section class="section section-bg-white">
+  <div class="rf-container" style="text-align:center; margin-bottom:40px;">
+    <div class="rf-section-title">What you get</div>
+    <h2>Everything you need to audit a gene ranking</h2>
+  </div>
+  <div class="feature-grid" style="max-width:940px; margin:0 auto;">
+    <div class="rf-feature-card">
+      <div class="rf-feature-icon">&#128202;</div>
+      <div class="rf-feature-title">Ranked Gene List</div>
+      <p class="rf-feature-desc">Interactive, searchable table of all genes in their ranked order, with binary feature values displayed as visual pills. Repeated genes are highlighted automatically.</p>
+    </div>
+    <div class="rf-feature-card">
+      <div class="rf-feature-icon">&#128270;</div>
+      <div class="rf-feature-title">Repeated Gene Detection</div>
+      <p class="rf-feature-desc">Automatically identifies any gene appearing more than once in your ranking list and flags it with a visual indicator and count badge.</p>
+    </div>
+    <div class="rf-feature-card">
+      <div class="rf-feature-icon">&#9878;&#65039;</div>
+      <div class="rf-feature-title">Flexible Feature Selection</div>
+      <p class="rf-feature-desc">Choose any binary feature columns from your dataset using a searchable multi-select. Start from our 5 recommended defaults and customize as needed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Fairness Oracles -->
+<section class="section section-bg-light" id="oracles">
+  <div class="rf-container" style="text-align:center; margin-bottom:40px;">
+    <div class="rf-section-title">Methodology</div>
+    <h2>Three statistical fairness oracles</h2>
+    <p style="color:var(--rf-text-muted); max-width:560px; margin:12px auto 0; font-size:0.9rem;">
+      Each oracle tests a different statistical definition of fairness at significance level
+      <span class="alpha-pill">&alpha; = 0.05</span>
+    </p>
+  </div>
+  <div class="oracle-grid" style="max-width:940px; margin:0 auto;">
+    <div class="oracle-card">
+      <div class="oracle-badge oracle-badge-1">Oracle 1</div>
+      <h4 style="margin-bottom:8px;">FA*IR</h4>
+      <p class="rf-feature-desc">
+        Tests whether the protected group appears frequently enough at <em>every prefix</em> of the ranking using a binomial CDF with Bonferroni-corrected alpha levels across all ranking positions.
+      </p>
+      <div style="margin-top:12px; font-size:0.78rem; color:var(--rf-text-muted);">
+        Zehlike et al., 2017 &bull; FA-IR algorithm
+      </div>
+    </div>
+    <div class="oracle-card">
+      <div class="oracle-badge oracle-badge-2">Oracle 2</div>
+      <h4 style="margin-bottom:8px;">Pairwise</h4>
+      <p class="rf-feature-desc">
+        Counts how often a gene in the protected group is ranked above a non-protected gene, compared to a pre-computed simulation distribution of fair rankings.
+      </p>
+      <div style="margin-top:12px; font-size:0.78rem; color:var(--rf-text-muted);">
+        Returns NA when simulation files are unavailable
+      </div>
+    </div>
+    <div class="oracle-card">
+      <div class="oracle-badge oracle-badge-3">Oracle 3</div>
+      <h4 style="margin-bottom:8px;">Proportion z-test</h4>
+      <p class="rf-feature-desc">
+        Compares the proportion of protected group members in the top-K to their proportion in the full dataset using a two-proportion z-test at the specified significance level.
+      </p>
+      <div style="margin-top:12px; font-size:0.78rem; color:var(--rf-text-muted);">
+        Based on &sect;4.1.3 of Zliobaite, 2015
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section section-bg-white" style="text-align:center;">
+  <div class="rf-container" style="max-width:520px;">
+    <h2>Ready to analyze your gene ranking?</h2>
+    <p style="color:var(--rf-text-muted); margin-bottom:28px;">
+      Upload a CSV with your pre-ranked genes, select features, and get fairness results in seconds.
+    </p>
+    <a href="{% url 'rankingfacts:upload_data' %}" class="btn-rf-primary" style="font-size:1rem; padding:13px 32px;">
+      Get Started &rarr;
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="rf-footer">
+  <div class="rf-footer-text">
+    GeneRank Fairness &mdash; A gene ranking fairness analysis tool.
+    Built on the <a href="https://dataresponsibly.github.io/" target="_blank">RankingFacts</a> framework.
+  </div>
+  <div class="rf-footer-text">
+    Fairness oracles: FA*IR &bull; Pairwise &bull; Proportion z-test
+  </div>
+</footer>
+
 </body>
 </html>
-

@@ -1,0 +1,612 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fairness Analysis — GeneRank Fairness</title>
+  <link rel="stylesheet" href="{% static 'css/gene-theme.css' %}">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{% static 'datatables/media/css/jquery.dataTables.min.css' %}">
+  <style>
+    .analysis-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+    /* Sidebar */
+    .rf-sidebar {
+      background: var(--rf-white);
+      border-right: 1px solid var(--rf-border);
+      padding: 24px 0;
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+    .sidebar-section { padding: 0 20px; margin-bottom: 24px; }
+    .sidebar-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--rf-text-muted);
+      margin-bottom: 10px;
+      padding: 0 4px;
+    }
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: var(--rf-radius-sm);
+      font-size: 0.85rem;
+      color: var(--rf-text);
+      text-decoration: none;
+      transition: background 0.12s;
+      cursor: pointer;
+    }
+    .sidebar-nav-item:hover { background: var(--rf-bg); color: var(--rf-navy); text-decoration: none; }
+    .sidebar-nav-item.active { background: var(--rf-orange-light); color: var(--rf-orange); font-weight: 600; }
+    .sidebar-nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .sidebar-feature-item {
+      padding: 6px 10px;
+      border-radius: var(--rf-radius-sm);
+      font-size: 0.78rem;
+      color: var(--rf-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-feature-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--rf-orange);
+      flex-shrink: 0;
+    }
+    /* Main content */
+    .analysis-main { padding: 0; background: var(--rf-bg); }
+    /* Stat bar */
+    .analysis-stat-bar {
+      background: var(--rf-navy);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 60px;
+      z-index: 50;
+    }
+    .astat { padding: 0 28px; border-right: 1px solid rgba(255,255,255,0.12); }
+    .astat:first-child { padding-left: 0; }
+    .astat:last-child { border-right: none; padding-right: 0; margin-left: auto; }
+    .astat-val { color: white; font-size: 1.4rem; font-weight: 700; line-height: 1; }
+    .astat-val.orange { color: var(--rf-orange); }
+    .astat-val.red { color: #FCA5A5; }
+    .astat-lbl { color: rgba(255,255,255,0.5); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 3px; }
+    /* Sections */
+    .analysis-section { margin: 24px 28px; }
+    .section-anchor { scroll-margin-top: 120px; }
+    /* Fairness oracle header row */
+    .oracle-header {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.85);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      text-align: center;
+      padding: 8px;
+    }
+    /* Fairness verdict cell */
+    .verdict-cell {
+      text-align: center;
+      padding: 14px 10px;
+      min-width: 110px;
+    }
+    .p-val-text {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      color: var(--rf-text-muted);
+      margin-top: 4px;
+      display: block;
+    }
+    /* For rows with no data */
+    .no-data-row td { color: var(--rf-text-muted); font-style: italic; font-size: 0.82rem; padding: 12px 16px; }
+    /* Feature group label */
+    .feat-group-label {
+      font-size: 0.68rem;
+      color: var(--rf-text-light);
+      font-weight: 400;
+      display: block;
+      margin-top: 2px;
+    }
+    /* Value row within a feature */
+    .val-group-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      color: var(--rf-text-muted);
+      background: var(--rf-bg);
+      border: 1px solid var(--rf-border-light);
+      border-radius: var(--rf-radius-pill);
+      padding: 1px 8px;
+      margin-bottom: 4px;
+    }
+    @media (max-width: 900px) {
+      .analysis-layout { grid-template-columns: 1fr; }
+      .rf-sidebar { display: none; }
+      .analysis-section { margin: 16px; }
+      .astat { padding: 0 16px; }
+      .astat-val { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="rf-nav">
+  <a href="{% url 'rankingfacts:base' %}" class="rf-nav-brand">
+    <div class="rf-nav-brand-icon">G</div>
+    <span class="rf-nav-brand-text">GeneRank <span>Fairness</span></span>
+  </a>
+  <div class="rf-nav-actions">
+    <span style="color:rgba(255,255,255,0.5);font-size:0.8rem;">{{ file_label }}</span>
+    <a href="{% url 'rankingfacts:feature_select' %}" class="btn-rf-outline-orange btn-sm">
+      Re-select Features
+    </a>
+    <a href="{% url 'rankingfacts:upload_data' %}" class="rf-nav-link">&larr; New Dataset</a>
+  </div>
+</nav>
+
+<div class="analysis-layout">
+
+  <!-- Sidebar -->
+  <aside class="rf-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Navigation</div>
+      <a href="#section-ranking" class="sidebar-nav-item">
+        <div class="sidebar-nav-dot" style="background:var(--rf-navy);"></div>
+        Ranked Gene List
+      </a>
+      {% if repeated_count > 0 %}
+      <a href="#section-repeated" class="sidebar-nav-item">
+        <div class="sidebar-nav-dot" style="background:var(--rf-orange);"></div>
+        Repeated Genes
+        <span class="rf-badge rf-badge-orange" style="margin-left:auto;font-size:0.68rem;">{{ repeated_count }}</span>
+      </a>
+      {% endif %}
+      <a href="#section-fairness" class="sidebar-nav-item">
+        <div class="sidebar-nav-dot" style="background:var(--rf-green);"></div>
+        Fairness Analysis
+      </a>
+    </div>
+
+    <div class="divider" style="margin:0 20px;"></div>
+
+    <div class="sidebar-section" style="margin-top:16px;">
+      <div class="sidebar-title">Selected Features ({{ selected_count }})</div>
+      {% for feat, label in selected_features_with_labels %}
+      <div class="sidebar-feature-item">
+        <div class="sidebar-feature-dot"></div>
+        <span>{{ label }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="divider" style="margin:0 20px;"></div>
+
+    <div class="sidebar-section" style="margin-top:16px;">
+      <div class="sidebar-title">Oracles</div>
+      <div class="sidebar-feature-item" style="align-items:flex-start;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--rf-orange);margin-top:5px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--rf-navy);">FA*IR</div>
+          <div style="font-size:0.7rem;color:var(--rf-text-muted);line-height:1.35;">Binomial CDF, every ranking prefix</div>
+        </div>
+      </div>
+      <div class="sidebar-feature-item" style="align-items:flex-start;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--rf-navy);margin-top:5px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--rf-navy);">Pairwise</div>
+          <div style="font-size:0.7rem;color:var(--rf-text-muted);line-height:1.35;">Concordant pair comparison</div>
+        </div>
+      </div>
+      <div class="sidebar-feature-item" style="align-items:flex-start;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--rf-green);margin-top:5px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--rf-navy);">Proportion z-test</div>
+          <div style="font-size:0.7rem;color:var(--rf-text-muted);line-height:1.35;">Top-K vs overall proportion</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="analysis-main">
+
+    <!-- Stat bar -->
+    <div class="analysis-stat-bar">
+      <div class="astat">
+        <div class="astat-val">{{ total_genes }}</div>
+        <div class="astat-lbl">Genes Ranked</div>
+      </div>
+      <div class="astat">
+        <div class="astat-val orange">{{ selected_count }}</div>
+        <div class="astat-lbl">Features Analyzed</div>
+      </div>
+      {% if repeated_count > 0 %}
+      <div class="astat">
+        <div class="astat-val red">{{ repeated_count }}</div>
+        <div class="astat-lbl">Repeated Genes</div>
+      </div>
+      {% else %}
+      <div class="astat">
+        <div class="astat-val" style="color:#86EFAC;">0</div>
+        <div class="astat-lbl">Repeated Genes</div>
+      </div>
+      {% endif %}
+      <div class="astat">
+        <div class="astat-val">{{ top_K }}</div>
+        <div class="astat-lbl">Top-K Threshold</div>
+      </div>
+      <div class="astat">
+        <div class="astat-val" style="font-size:1rem;font-family:monospace;">&alpha; = {{ alpha_default }}</div>
+        <div class="astat-lbl">Significance Level</div>
+      </div>
+      <div class="astat" style="margin-left:auto !important; border-right:none !important;">
+        <a href="{% url 'rankingfacts:feature_select' %}" class="btn-rf-outline-orange btn-sm" style="border-color:rgba(241,90,34,0.6); color:var(--rf-orange);">
+          &#9881; Re-select Features
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Section 1: Ranked Gene List ── -->
+    <div class="analysis-section section-anchor" id="section-ranking">
+      <div class="rf-card">
+        <div class="rf-card-header">
+          <div class="flex items-center gap-12">
+            <h4>Ranked Gene List</h4>
+            <span class="rf-badge rf-badge-navy rf-badge-count">{{ total_genes }} genes</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--rf-text-muted);">
+            {% if repeated_count > 0 %}
+            <span style="color:var(--rf-orange);">&#9888; {{ repeated_count }} repeated</span> &nbsp;|&nbsp;
+            {% endif %}
+            Showing top 200 &bull; Feature values: <span class="rf-pill-1" style="font-size:0.7rem;">1</span> = present
+          </div>
+        </div>
+        <div class="rf-card-body" style="padding:0;">
+          <div style="overflow-x:auto;">
+            <table id="gene-table" class="rf-gene-table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th style="width:50px;">Rank</th>
+                  <th>Gene</th>
+                  <th>NCBI ID</th>
+                  {% for feat, label in selected_features_with_labels %}
+                  <th title="{{ feat }}">{{ label }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody id="gene-table-body">
+                <tr><td colspan="999" style="text-align:center;padding:32px;color:var(--rf-text-muted);">
+                  <div class="rf-loading" style="justify-content:center;">
+                    <div class="rf-spinner"></div> Loading gene data...
+                  </div>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section 2: Repeated Genes ── -->
+    {% if repeated_count > 0 %}
+    <div class="analysis-section section-anchor" id="section-repeated">
+      <div class="rf-repeated-alert">
+        <div class="rf-repeated-alert-icon">&#9888;</div>
+        <div style="flex:1;">
+          <div class="rf-repeated-alert-title">
+            {{ repeated_count }} gene{% if repeated_count != 1 %}s{% endif %} appear multiple times in this ranking
+          </div>
+          <div style="font-size:0.82rem;color:var(--rf-text-muted);margin-bottom:8px;">
+            These genes are highlighted with an orange left border in the ranked list above.
+          </div>
+          <div class="rf-repeated-gene-pills">
+            {% for gene, count in repeated_genes.items %}
+            <span class="rf-repeated-gene-pill">
+              {{ gene }}
+              <span class="count">&times;{{ count }}</span>
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── Section 3: Fairness Analysis ── -->
+    <div class="analysis-section section-anchor" id="section-fairness">
+      <div class="rf-card">
+        <div class="rf-card-header">
+          <div class="flex items-center gap-12">
+            <h4>Fairness Analysis</h4>
+            <span class="rf-badge rf-badge-navy rf-badge-count">{{ selected_count }} features</span>
+            <span class="rf-badge rf-badge-orange" style="font-family:monospace;font-size:0.72rem;">&alpha; = {{ alpha_default }}</span>
+          </div>
+          <div>
+            <!-- Collapsible info toggle -->
+            <button type="button" class="rf-collapse-toggle" id="oracle-info-toggle" style="background:none;border:none;padding:0;cursor:pointer;">
+              <span style="font-size:0.8rem;color:var(--rf-text-muted);">About oracles</span>
+              <span class="rf-collapse-arrow">&#9654;</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Oracle info panel (collapsible) -->
+        <div id="oracle-info-panel" style="display:none; background:var(--rf-bg); border-bottom:1px solid var(--rf-border-light); padding:16px 24px;">
+          <div class="rf-oracle-legend">
+            <div class="rf-oracle-item">
+              <div class="rf-oracle-dot rf-oracle-dot-orange"></div>
+              <div>
+                <div class="rf-oracle-name">FA*IR (Oracle 1)</div>
+                <div class="rf-oracle-desc">Tests group representation at every ranking prefix via binomial CDF with Bonferroni-corrected significance levels. p-value compared to adjusted &alpha;<sub>c</sub>.</div>
+              </div>
+            </div>
+            <div class="rf-oracle-item">
+              <div class="rf-oracle-dot rf-oracle-dot-navy"></div>
+              <div>
+                <div class="rf-oracle-name">Pairwise (Oracle 2)</div>
+                <div class="rf-oracle-desc">Concordant pair count compared to pre-computed simulation distribution. Returns NA when simulation files are not available for this dataset size.</div>
+              </div>
+            </div>
+            <div class="rf-oracle-item">
+              <div class="rf-oracle-dot rf-oracle-dot-fair"></div>
+              <div>
+                <div class="rf-oracle-name">Proportion z-test (Oracle 3)</div>
+                <div class="rf-oracle-desc">Two-proportion z-test comparing the proportion of the group in top-{{ top_K }} to their proportion in the full ranking of {{ total_genes }} genes.</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:0.75rem;color:var(--rf-text-muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--rf-border-light);">
+            For each feature, both value groups (0 and 1) are tested independently as the "protected group."
+            A verdict of <strong>FAIR</strong> means p &gt; &alpha;; <strong>UNFAIR</strong> means p &le; &alpha;.
+          </div>
+        </div>
+
+        <!-- Fairness table -->
+        <div style="overflow-x:auto;">
+          <table class="rf-fairness-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th style="width:30%;">Gene Feature</th>
+                <th style="width:8%;">Value Group</th>
+                <th class="oracle-header" style="width:20%;">FA*IR</th>
+                <th class="oracle-header" style="width:20%;">Pairwise</th>
+                <th class="oracle-header" style="width:20%;">Proportion z-test</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for feat_row in fairness_table %}
+                {% if feat_row.val_rows %}
+                  {% for vrow in feat_row.val_rows %}
+                  <tr class="{% if vrow.res_fair == 'unfair' or vrow.res_pairwise == 'unfair' or vrow.res_proportion == 'unfair' %}has-unfair{% else %}all-fair{% endif %}">
+                    {% if forloop.first %}
+                    <td class="rf-fairness-feature-cell" rowspan="{{ feat_row.val_rows|length }}">
+                      <span class="rf-fairness-feature-name">{{ feat_row.label }}</span>
+                      <span class="feat-group-label">{{ feat_row.study }}</span>
+                    </td>
+                    {% endif %}
+                    <td style="padding:10px 12px;">
+                      <span class="val-group-tag">
+                        val = {{ vrow.value }}
+                      </span>
+                    </td>
+                    <!-- FA*IR -->
+                    <td class="verdict-cell">
+                      {% if vrow.res_fair == 'fair' %}
+                        <span class="rf-badge rf-badge-fair">FAIR</span>
+                      {% elif vrow.res_fair == 'unfair' %}
+                        <span class="rf-badge rf-badge-unfair">UNFAIR</span>
+                      {% else %}
+                        <span class="rf-badge rf-badge-na">NA</span>
+                      {% endif %}
+                      {% if vrow.p_fair is not None %}
+                      <span class="p-val-text">p = {{ vrow.p_fair }}</span>
+                      {% endif %}
+                    </td>
+                    <!-- Pairwise -->
+                    <td class="verdict-cell">
+                      {% if vrow.res_pairwise == 'fair' %}
+                        <span class="rf-badge rf-badge-fair">FAIR</span>
+                      {% elif vrow.res_pairwise == 'unfair' %}
+                        <span class="rf-badge rf-badge-unfair">UNFAIR</span>
+                      {% else %}
+                        <span class="rf-badge rf-badge-na">NA</span>
+                      {% endif %}
+                      {% if vrow.p_pairwise is not None %}
+                      <span class="p-val-text">p = {{ vrow.p_pairwise }}</span>
+                      {% endif %}
+                    </td>
+                    <!-- Proportion -->
+                    <td class="verdict-cell">
+                      {% if vrow.res_proportion == 'fair' %}
+                        <span class="rf-badge rf-badge-fair">FAIR</span>
+                      {% elif vrow.res_proportion == 'unfair' %}
+                        <span class="rf-badge rf-badge-unfair">UNFAIR</span>
+                      {% else %}
+                        <span class="rf-badge rf-badge-na">NA</span>
+                      {% endif %}
+                      {% if vrow.p_proportion is not None %}
+                      <span class="p-val-text">p = {{ vrow.p_proportion }}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="rf-fairness-feature-cell">
+                    <span class="rf-fairness-feature-name">{{ feat_row.label }}</span>
+                    <span class="feat-group-label">{{ feat_row.study }}</span>
+                  </td>
+                  <td>—</td>
+                  <td colspan="3" class="no-data-row">Feature not found in dataset or no valid values.</td>
+                </tr>
+                {% endif %}
+              {% empty %}
+              <tr>
+                <td colspan="5" style="text-align:center;padding:32px;color:var(--rf-text-muted);">
+                  No features selected. <a href="{% url 'rankingfacts:feature_select' %}">Select features</a> to run fairness analysis.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="rf-card-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span>
+            <strong>Legend:</strong>
+            <span class="rf-badge rf-badge-fair" style="margin:0 4px;">FAIR</span> p &gt; {{ alpha_default }} &nbsp;
+            <span class="rf-badge rf-badge-unfair" style="margin:0 4px;">UNFAIR</span> p &le; {{ alpha_default }} &nbsp;
+            <span class="rf-badge rf-badge-na" style="margin:0 4px;">NA</span> not computable
+          </span>
+          <a href="{% url 'rankingfacts:feature_select' %}" class="btn-rf-outline-orange btn-sm">
+            &#9881; Change Features &amp; Re-run
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:40px;"></div>
+
+  </main>
+</div>
+
+{{ selected_features|json_script:"selected-features-data" }}
+{{ selected_labels|json_script:"selected-labels-data" }}
+
+<!-- Scripts -->
+<script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'datatables/media/js/jquery.dataTables.min.js' %}"></script>
+
+<script>
+// ── Oracle info panel toggle ──────────────────────────────────────────────
+document.getElementById('oracle-info-toggle').addEventListener('click', function() {
+  const panel = document.getElementById('oracle-info-panel');
+  const arrow = this.querySelector('.rf-collapse-arrow');
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    this.classList.add('open');
+  } else {
+    panel.style.display = 'none';
+    this.classList.remove('open');
+  }
+});
+
+// ── Load gene ranking table via AJAX ─────────────────────────────────────
+const selectedFeatures = JSON.parse(document.getElementById('selected-features-data').textContent);
+const selectedLabels   = JSON.parse(document.getElementById('selected-labels-data').textContent);
+
+// Map feature name → short label for column headers
+function shortLabel(feat) {
+  return selectedLabels[feat] || feat.split(':').pop().trim();
+}
+
+fetch("{% url 'rankingfacts:json_gene_ranking' %}")
+  .then(r => r.json())
+  .then(data => {
+    const tbody = document.getElementById('gene-table-body');
+    tbody.innerHTML = '';
+
+    if (!data || data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="999" style="text-align:center;padding:24px;color:var(--rf-text-muted);">No gene data found.</td></tr>';
+      return;
+    }
+
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+      if (row.is_repeated === 1) tr.classList.add('repeated-gene');
+
+      // Rank
+      const tdRank = document.createElement('td');
+      tdRank.innerHTML = `<span class="rf-rank-num">${row.Rank || ''}</span>`;
+      tr.appendChild(tdRank);
+
+      // Gene Name
+      const tdGene = document.createElement('td');
+      const geneName = row.Gene_Name || '—';
+      tdGene.innerHTML = `<span class="rf-gene-name">${geneName}</span>`;
+      if (row.is_repeated === 1) {
+        tdGene.innerHTML += ` <span class="rf-badge rf-badge-orange" style="font-size:0.65rem;margin-left:4px;">repeat</span>`;
+      }
+      tr.appendChild(tdGene);
+
+      // NCBI ID
+      const tdNcbi = document.createElement('td');
+      tdNcbi.style.color = 'var(--rf-text-muted)';
+      tdNcbi.style.fontSize = '0.8rem';
+      tdNcbi.textContent = row.gene_ncbi || '—';
+      tr.appendChild(tdNcbi);
+
+      // Feature columns
+      selectedFeatures.forEach(feat => {
+        const td = document.createElement('td');
+        td.style.textAlign = 'center';
+        const val = row[feat];
+        if (val === 1 || val === '1') {
+          td.innerHTML = `<span class="rf-pill-1">1</span>`;
+        } else if (val === 0 || val === '0') {
+          td.innerHTML = `<span class="rf-pill-0">0</span>`;
+        } else {
+          td.innerHTML = `<span style="color:var(--rf-text-light);font-size:0.8rem;">—</span>`;
+        }
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+
+    // Initialize DataTables
+    $('#gene-table').DataTable({
+      pageLength: 25,
+      lengthMenu: [10, 25, 50, 100],
+      order: [[0, 'asc']],
+      columnDefs: [{ orderable: false, targets: '_all' }],
+      language: {
+        search: '',
+        searchPlaceholder: 'Search genes...',
+        lengthMenu: 'Show _MENU_ genes',
+        info: 'Showing _START_\u2013_END_ of _TOTAL_ genes',
+      },
+    });
+  })
+  .catch(err => {
+    document.getElementById('gene-table-body').innerHTML =
+      `<tr><td colspan="999" style="text-align:center;padding:24px;color:var(--rf-red);">Error loading gene data: ${err.message}</td></tr>`;
+  });
+
+// ── Smooth scroll for sidebar links ──────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

@@ -25,7 +25,7 @@ from .models import getSizeOfRanking
 from .models import getSizeOfDataset
 from .models import compute_correlation
 from .models import get_chart_data
-from DataSynthesizer.lib.utils import read_json_file
+from rankingfacts.utils import read_json_file
 
 
 # view functions to handle index page
