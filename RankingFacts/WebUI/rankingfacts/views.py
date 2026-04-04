@@ -208,6 +208,9 @@ def gene_analysis(request):
                 m_pairwise   = _compare(res_pairwise,   g_pairwise)
                 m_proportion = _compare(res_proportion, g_proportion)
 
+                match_count      = sum(1 for m in (m_fair, m_pairwise, m_proportion) if m == 'match')
+                comparable_count = sum(1 for m in (m_fair, m_pairwise, m_proportion) if m != 'na')
+
                 for m in (m_fair, m_pairwise, m_proportion):
                     if m != 'na':
                         alignment_total += 1
@@ -229,10 +232,12 @@ def gene_analysis(request):
                     'g_fair':         g_fair,
                     'g_pairwise':     g_pairwise,
                     'g_proportion':   g_proportion,
-                    'match_fair':     m_fair,
-                    'match_pairwise': m_pairwise,
-                    'match_proportion': m_proportion,
-                    'has_global':     gbm is not None and grp is not None,
+                    'match_fair':        m_fair,
+                    'match_pairwise':    m_pairwise,
+                    'match_proportion':  m_proportion,
+                    'match_count':       match_count,
+                    'comparable_count':  comparable_count,
+                    'has_global':        gbm is not None and grp is not None,
                 })
 
         fairness_table.append({
