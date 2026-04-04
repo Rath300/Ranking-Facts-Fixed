@@ -22,8 +22,6 @@ from . import views
 urlpatterns = [
     path('', views.base, name='base'),
     path('rankingfacts/', include('rankingfacts.urls')),
-   # url(r'^dataflow/', include('dataflow.urls')),
-    path('synthesizer/', include('synthesizer.urls')),
     path('admin/', admin.site.urls),
 
 ]
