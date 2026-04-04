@@ -110,6 +110,41 @@ def feature_select(request):
     return render(request, "rankingfacts/feature_select.html", context)
 
 
+def _load_global_benchmark():
+    """
+    Load the researcher's pre-computed full-population fairness benchmark.
+    Returns a dict: {attribute_name: {FAIR_g0, Pairwise_g0, Proportion_g0,
+                                       FAIR_g1, Pairwise_g1, Proportion_g1}}
+    Values are 'fair', 'unfair', or None.
+    """
+    benchmark_path = os.path.join(settings.PLAYDATA_ROOT, 'fairness_benchmark.csv')
+    if not os.path.exists(benchmark_path):
+        return {}
+    df = pd.read_csv(benchmark_path)
+    bool_cols = ['FAIR_g1', 'Pairwise_g1', 'Proportion_g1',
+                 'FAIR_g0', 'Pairwise_g0', 'Proportion_g0']
+
+    def _to_verdict(val):
+        if val is True or str(val).strip() == 'True':
+            return 'fair'
+        if val is False or str(val).strip() == 'False':
+            return 'unfair'
+        return None
+
+    lookup = {}
+    for _, row in df.iterrows():
+        attr = str(row['attribute'])
+        lookup[attr] = {col: _to_verdict(row[col]) for col in bool_cols if col in df.columns}
+    return lookup
+
+
+def _compare(local, global_v):
+    """Return 'match', 'diverge', or 'na' for two verdict strings."""
+    if local in ('fair', 'unfair') and global_v in ('fair', 'unfair'):
+        return 'match' if local == global_v else 'diverge'
+    return 'na'
+
+
 def gene_analysis(request):
     data_name = request.session.get('passed_data_name')
     selected_features = request.session.get('selected_features', GENE_DEFAULT_FEATURES)
@@ -130,56 +165,102 @@ def gene_analysis(request):
         selected_features, data_name
     )
 
-    # Build a display-friendly fairness table:
-    # fairness_table = list of {feature_key, feature_label, values: [{value, fair, pairwise, proportion, p_fair, p_pairwise, p_proportion}]}
+    # Load full-population benchmark for comparison
+    global_benchmark = _load_global_benchmark()
+
+    alignment_matches = 0
+    alignment_total = 0
+
     fairness_table = []
     for feat in selected_features:
         feat_key = feat.replace(" ", "_")
         label = get_feature_label(feat)
-        # Study group (text before first colon)
         study = feat.split(':')[0].strip() if ':' in feat else 'Other'
+
+        # Global benchmark row for this feature (keyed by original name)
+        gbm = global_benchmark.get(feat)
 
         val_rows = []
         if feat_key in fair_statement_data:
             for val_key, verdicts in fair_statement_data[feat_key].items():
-                p_vals = fair_res_data.get(feat_key, {}).get(val_key, [None, None, None, None, None, None])
+                p_vals = fair_res_data.get(feat_key, {}).get(val_key, [None]*6)
+
+                res_fair       = verdicts[0]
+                res_pairwise   = verdicts[1]
+                res_proportion = verdicts[2]
+
+                # Map val_key (e.g. "1.0" / "0.0") to g1 / g0
+                if val_key in ('1.0', '1'):
+                    grp = 'g1'
+                elif val_key in ('0.0', '0'):
+                    grp = 'g0'
+                else:
+                    grp = None
+
+                if gbm and grp:
+                    g_fair       = gbm.get(f'FAIR_{grp}')
+                    g_pairwise   = gbm.get(f'Pairwise_{grp}')
+                    g_proportion = gbm.get(f'Proportion_{grp}')
+                else:
+                    g_fair = g_pairwise = g_proportion = None
+
+                m_fair       = _compare(res_fair,       g_fair)
+                m_pairwise   = _compare(res_pairwise,   g_pairwise)
+                m_proportion = _compare(res_proportion, g_proportion)
+
+                for m in (m_fair, m_pairwise, m_proportion):
+                    if m != 'na':
+                        alignment_total += 1
+                        if m == 'match':
+                            alignment_matches += 1
+
                 val_rows.append({
-                    'value': val_key,
-                    'res_fair': verdicts[0],
-                    'res_pairwise': verdicts[1],
-                    'res_proportion': verdicts[2],
-                    'p_fair': p_vals[0],
-                    'alphac_fair': p_vals[1],
-                    'p_pairwise': p_vals[2],
+                    'value':          val_key,
+                    'res_fair':       res_fair,
+                    'res_pairwise':   res_pairwise,
+                    'res_proportion': res_proportion,
+                    'p_fair':         p_vals[0],
+                    'alphac_fair':    p_vals[1],
+                    'p_pairwise':     p_vals[2],
                     'alpha_pairwise': p_vals[3],
-                    'p_proportion': p_vals[4],
+                    'p_proportion':   p_vals[4],
                     'alpha_proportion': p_vals[5],
+                    # Global comparison
+                    'g_fair':         g_fair,
+                    'g_pairwise':     g_pairwise,
+                    'g_proportion':   g_proportion,
+                    'match_fair':     m_fair,
+                    'match_pairwise': m_pairwise,
+                    'match_proportion': m_proportion,
+                    'has_global':     gbm is not None and grp is not None,
                 })
+
         fairness_table.append({
-            'feature': feat,
+            'feature':     feat,
             'feature_key': feat_key,
-            'label': label,
-            'study': study,
-            'val_rows': val_rows,
+            'label':       label,
+            'study':       study,
+            'val_rows':    val_rows,
+            'has_global':  gbm is not None,
         })
 
-    # Build feature labels for the selected features (for sidebar/summary)
     selected_labels = {f: get_feature_label(f) for f in selected_features}
-    # Ordered list of (feature, label) pairs for template iteration
     selected_features_with_labels = [(f, get_feature_label(f)) for f in selected_features]
 
     context = {
-        'file_label': file_label,
-        'total_genes': total_genes,
-        'repeated_genes': repeated_genes,
-        'repeated_count': len(repeated_genes),
-        'fairness_table': fairness_table,
-        'selected_features': selected_features,
-        'selected_labels': selected_labels,
+        'file_label':                    file_label,
+        'total_genes':                   total_genes,
+        'repeated_genes':                repeated_genes,
+        'repeated_count':                len(repeated_genes),
+        'fairness_table':                fairness_table,
+        'selected_features':             selected_features,
+        'selected_labels':               selected_labels,
         'selected_features_with_labels': selected_features_with_labels,
-        'selected_count': len(selected_features),
-        'alpha_default': alpha_default,
-        'top_K': top_K,
+        'selected_count':                len(selected_features),
+        'alpha_default':                 alpha_default,
+        'top_K':                         top_K,
+        'alignment_matches':             alignment_matches,
+        'alignment_total':               alignment_total,
     }
     return render(request, "rankingfacts/gene_analysis.html", context)
 

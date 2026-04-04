@@ -1,0 +1,402 @@
+attribute,FAIR_g1,Pairwise_g1,Proportion_g1,FAIR_g0,Pairwise_g0,Proportion_g0
+"Lek et al., 2016: exome variation, syn_z",True,True,True,False,True,True
+"Lek et al., 2016: exome variation, mis_z",False,True,False,True,True,True
+"Lek et al., 2016: exome variation, lof_z",False,True,False,True,False,True
+"Lek et al., 2016: exome variation, pLI",True,True,True,False,False,True
+"Lek et al., 2016: exome variation, pRec",False,True,True,True,True,True
+"Lek et al., 2016: exome variation, pNull",True,False,True,False,True,False
+"Lek et al., 2016: exome variation, exp_syn",False,True,False,True,True,True
+"Lek et al., 2016: exome variation, exp_mis",False,True,False,True,True,True
+"Lek et al., 2016: exome variation, exp_lof",False,True,False,True,True,True
+Aminoacids_swiss_or_trembl: A,True,False,True,True,True,True
+Protein: cysteine,True,True,True,True,True,True
+Protein: aspartic acid,False,True,True,True,False,True
+Protein: glutamic acid,False,False,False,True,True,True
+Protein: phenylalanine,True,True,True,True,True,True
+Protein: glycine,True,True,True,True,True,True
+Protein: histidine,True,False,True,True,True,True
+Protein: isoleucine,True,True,True,True,False,True
+Protein: lysine,True,True,True,False,False,False
+Protein: Leucine,True,False,True,True,True,True
+Protein: methionine,True,True,True,True,True,True
+Protein: asparagine,True,True,True,False,False,False
+Protein: proline,True,True,True,True,True,True
+Protein: glutamine,False,False,False,True,True,True
+Protein: arginine,False,False,False,True,True,True
+Protein: serine,True,True,True,True,True,True
+Protein: threonine,True,True,True,True,False,True
+Protein: valine,True,True,True,True,True,True
+Protein: tryptophan,False,True,False,True,True,True
+Protein: tyrosine,True,True,True,True,False,True
+Protein: acidic amino acids,False,True,False,True,True,True
+Protein: length,False,True,False,True,True,True
+Protein: aromatic amino acids,True,True,True,True,False,True
+Protein: basic amino acids,True,False,True,True,True,True
+Protein: charged amino acids,False,True,False,True,True,True
+Protein: GRAVY score of hydrophobicity,True,True,True,True,True,True
+Protein: helix-affine amino acids,True,True,True,True,True,True
+Protein: hydrophobic amino acids,True,True,True,True,True,True
+Protein: isoelectric point,True,False,True,False,True,False
+Protein: molecular weight,False,True,False,True,False,True
+Protein: polar amino acids,True,True,True,False,False,True
+Protein: uncharged polar amino acids,True,True,True,True,False,True
+Protein: sheet affine amino acids,False,False,False,True,True,True
+Protein: turn affine amino acids,True,True,True,False,False,True
+Chromosome identifier,False,False,False,True,True,True
+"Blomen et al., 2015: total sense (KBM7 cells)",False,True,False,True,True,True
+"Blomen et al., 2015: total antisense (KBM7 cells)",False,False,False,True,True,True
+"Blomen et al., 2015: p value (KBM7 cells)",True,True,True,False,False,False
+"Blomen et al., 2015: q value (KBM7 cells)",True,True,True,False,False,False
+"Blomen et al., 2015: total antisense (HAP1 cells)",False,True,False,True,True,True
+"Blomen et al., 2015: p value (HAP1 cells)",True,True,True,False,False,False
+"Blomen et al., 2015: q value (HAP1 cells)",True,True,True,False,False,False
+"Hart et al., 2015: gene essentiality in A375 GeCKo",False,False,False,True,True,True
+"Hart et al., 2015: gene essentiality in DLD1",True,False,True,True,True,True
+"Hart et al., 2015: gene essentiality in GBM",True,False,True,False,True,False
+"Hart et al., 2015: gene essentiality in HCT116",True,False,True,True,True,True
+"Hart et al., 2015: gene essentiality in HeLa",True,False,True,True,True,True
+"Hart et al., 2015: gene essentiality in Rpe1",True,False,True,True,True,True
+"Wang et al., 2015: CRISPR score: KBM7",True,True,True,False,False,False
+"Wang et al., 2015: CRISPR score: Jiyoye",True,True,True,False,False,False
+"Wang et al., 2015: CRISPR score: Raji",True,True,True,False,False,False
+Coding sequence of validated RNA: alanine,True,True,True,False,False,False
+Coding sequence of validated RNA: AAA,False,False,True,True,True,True
+Coding sequence of validated RNA: AAC,False,False,False,True,True,True
+Coding sequence of validated RNA: AAG,False,False,False,True,True,True
+Coding sequence of validated RNA: AAT,False,True,False,True,False,True
+Coding sequence of validated RNA: ACA,True,True,True,False,False,True
+Coding sequence of genomically predicted RNA: alanine,False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: AAA,True,True,True,False,False,False
+Coding sequence of genomically predicted RNA: AAC,True,True,True,False,False,False
+Coding sequence of genomically predicted RNA: AAG,False,True,True,True,True,True
+Coding sequence of genomically predicted RNA: AAT,True,True,True,False,False,False
+Coding sequence of genomically predicted RNA: ACA,False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: ACC,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: ACG,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: ACT,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: AGA,False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: AGC,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: AGG,False,True,False,True,True,True
+Coding sequence of genomically predicted RNA: AGT,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: ATA,False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: ATC,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: ATG,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: ATT,True,True,True,False,False,False
+Coding sequence of genomically predicted RNA: cytosine,True,False,True,True,True,True
+Coding sequence of genomically predicted RNA: CAA,True,True,True,True,False,False
+Coding sequence of genomically predicted RNA: CAC,False,False,True,True,True,True
+Coding sequence of genomically predicted RNA: CAG,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: CAT,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: CCA,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: CCC,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: CCG,True,False,True,True,True,True
+Coding sequence of genomically predicted RNA: CCT,True,True,True,False,True,True
+Coding sequence of genomically predicted RNA: CG content,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: CGA,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: CGC,True,False,True,True,True,True
+Coding sequence of genomically predicted RNA: CGG,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: CGT,True,False,True,False,True,True
+Coding sequence of genomically predicted RNA: CTA,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: CTC,True,False,True,True,True,True
+Coding sequence of genomically predicted RNA: CTG,True,False,True,True,True,True
+Coding sequence of genomically predicted RNA: CTT,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: guanine,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: GAA,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: GAC,True,True,True,False,True,True
+Coding sequence of genomically predicted RNA: GAG,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: GAT,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: GCA,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: GCC,True,False,True,True,True,True
+Coding sequence of genomically predicted RNA: GCG,False,False,True,True,True,True
+Coding sequence of genomically predicted RNA: GCT,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: GGA,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: GGC,True,False,True,False,True,True
+Coding sequence of genomically predicted RNA: GGG,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: GGT,True,True,True,False,True,True
+Coding sequence of genomically predicted RNA: GTA,False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: GTC,True,True,True,True,True,True
+Coding sequence of genomically predicted RNA: GTG,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: GTT,True,True,True,False,False,False
+Coding sequence of genomically predicted RNA: length,False,True,False,True,False,True
+Coding sequence of genomically predicted RNA: thymidine,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: TAC,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: TAT,True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: TCA,False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: TCC,False,True,False,True,True,True
+Coding sequence of genomically predicted RNA: TCG,False,True,False,True,True,True
+Coding sequence of genomically predicted RNA: TCT,True,True,True,False,False,True
+Coding sequence of genomically predicted RNA: TGA,False,False,False,True,True,True
+Coding sequence of genomically predicted RNA: TGC,True,True,True,False,True,True
+Coding sequence of genomically predicted RNA: TGG,False,True,False,True,True,True
+Coding sequence of genomically predicted RNA: TGT,True,True,True,False,False,False
+Coding sequence of genomically predicted RNA: TTA,False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: TTC,True,False,True,False,True,True
+Coding sequence of genomically predicted RNA: TTG,False,True,True,True,True,True
+Coding sequence of genomically predicted RNA: TTT,True,True,True,False,False,False
+Coding sequence of genomically predicted RNA: codon bias (CDS method),True,False,True,False,True,True
+Coding sequence of genomically predicted RNA: codon bias (Novembre's method),True,True,True,True,False,True
+Coding sequence of genomically predicted RNA: codon bias (RCBS method),True,False,True,False,True,False
+Coding sequence of genomically predicted RNA: codon bias (SCUO method),True,False,True,False,True,True
+Coding sequence of genomically predicted RNA: codon bias (Sun's method),False,True,True,True,False,True
+Coding sequence of genomically predicted RNA: codon bias (Wright's method),False,True,True,True,False,True
+Coding sequence of validated RNA: ACC,False,True,True,True,False,True
+Coding sequence of validated RNA: ACG,True,True,True,False,False,False
+Coding sequence of validated RNA: ACT,True,True,True,False,False,False
+Coding sequence of validated RNA: AGA,False,True,True,True,True,True
+Coding sequence of validated RNA: AGC,True,True,True,False,False,False
+Coding sequence of validated RNA: AGG,False,True,True,True,False,True
+Coding sequence of validated RNA: AGT,True,True,True,True,True,True
+Coding sequence of validated RNA: ATA,True,True,True,True,True,True
+Coding sequence of validated RNA: ATC,True,True,True,False,False,False
+Coding sequence of validated RNA: ATG,False,True,True,True,False,True
+Coding sequence of validated RNA: ATT,True,False,True,True,True,True
+Coding sequence of validated RNA: cytosine,False,True,False,True,True,True
+Coding sequence of validated RNA: CAA,True,True,True,True,False,True
+Coding sequence of validated RNA: CAC,True,True,True,True,False,False
+Coding sequence of validated RNA: CAG,True,True,True,True,True,True
+Coding sequence of validated RNA: CAT,True,True,True,True,True,True
+Coding sequence of validated RNA: CCA,True,True,True,False,False,True
+Coding sequence of validated RNA: CCC,False,False,False,True,True,True
+Coding sequence of validated RNA: CCG,True,True,True,True,False,True
+Coding sequence of validated RNA: CCT,False,False,False,True,True,True
+Coding sequence of validated RNA: CG,False,False,False,True,True,True
+Coding sequence of validated RNA: CGA,True,True,True,True,True,True
+Coding sequence of validated RNA: CGC,True,True,True,False,False,True
+Coding sequence of validated RNA: CGG,False,False,False,True,True,True
+Coding sequence of validated RNA: CGT,True,False,True,True,True,True
+Coding sequence of validated RNA: CTA,True,True,True,False,True,True
+Coding sequence of validated RNA: CTC,False,False,False,True,True,True
+Coding sequence of validated RNA: CTG,False,False,False,True,True,True
+Coding sequence of validated RNA: CTT,True,False,True,True,True,True
+Coding sequence of validated RNA: guanine,False,False,False,True,True,True
+Coding sequence of validated RNA: GAA,True,False,True,False,True,True
+Coding sequence of validated RNA: GAC,True,True,True,True,True,True
+Coding sequence of validated RNA: GAG,True,False,True,True,True,True
+Coding sequence of validated RNA: GAT,True,False,True,True,True,True
+Coding sequence of validated RNA: GCA,True,True,True,True,False,True
+Coding sequence of validated RNA: GCC,False,False,False,True,True,True
+Coding sequence of validated RNA: GCG,True,True,True,True,False,True
+Coding sequence of validated RNA: GCT,True,True,True,False,True,True
+Coding sequence of validated RNA: GGA,False,False,False,True,True,True
+Coding sequence of validated RNA: GGC,True,True,True,True,False,True
+Coding sequence of validated RNA: GGG,True,True,True,True,True,True
+Coding sequence of validated RNA: GGT,True,False,True,True,True,True
+Coding sequence of validated RNA: GTA,False,False,True,True,True,True
+Coding sequence of validated RNA: GTC,True,True,True,True,True,True
+Coding sequence of validated RNA: GTG,True,True,True,True,False,True
+Coding sequence of validated RNA: GTT,True,False,False,False,True,True
+Coding sequence of validated RNA: length,False,False,False,True,True,True
+Coding sequence of validated RNA: uracil,True,True,True,False,True,True
+Coding sequence of validated RNA: TAA,False,True,True,True,False,True
+Coding sequence of validated RNA: TAC,True,True,True,True,True,True
+Coding sequence of validated RNA: TAG,False,False,False,True,True,True
+Coding sequence of validated RNA: TAT,True,True,True,False,False,False
+Coding sequence of validated RNA: TCA,False,True,False,True,True,True
+Coding sequence of validated RNA: TCC,True,True,True,False,False,False
+Coding sequence of validated RNA: TCT,True,True,True,True,False,True
+Coding sequence of validated RNA: TGC,True,True,True,True,False,True
+Coding sequence of validated RNA: TGG,False,True,True,True,False,True
+Coding sequence of validated RNA: TGT,False,True,False,True,True,True
+Coding sequence of validated RNA: TTA,False,True,False,True,True,True
+Coding sequence of validated RNA: TTC,True,True,True,False,False,True
+Coding sequence of validated RNA: TTG,False,False,False,True,True,True
+Coding sequence of validated RNA: TTT,True,True,True,False,True,True
+Coding sequence of validated RNA: codon bias (CDS method),False,True,False,True,True,True
+Coding sequence of validated RNA: codon bias (Novembre's method),True,True,True,False,False,False
+Coding sequence of validated RNA: codon bias (RCBS method),False,True,True,True,False,True
+Coding sequence of validated RNA: codon bias (SCUO method),True,False,True,False,True,True
+Coding sequence of validated RNA: codon bias (Sun's method),False,True,True,True,True,True
+Coding sequence of validated RNA: codon bias (Wright's method),True,True,True,False,False,False
+Coding sequence of validated RNA: alanine.1,True,False,True,False,True,True
+Coding sequence of validated RNA: cytosine.1,True,True,True,True,False,True
+Coding sequence of validated RNA: CG content,True,False,True,False,True,False
+Coding sequence of validated RNA: guanine.1,True,False,True,False,True,True
+Coding sequence of validated RNA: length.1,False,True,True,True,False,True
+Coding sequence of validated RNA: tymidine,False,True,True,True,False,True
+RNA: alanine,True,True,True,False,False,False
+RNA: cytosine,False,False,False,True,True,True
+RNA: CG content,False,False,False,True,True,True
+RNA: guanine,False,False,False,True,True,True
+RNA: length,False,True,False,True,False,True
+RNA: tymidine,True,True,True,False,False,False
+"Protein: repeats, length",False,True,True,True,True,True
+"Protein: repeats, number of repeats",False,True,False,True,True,True
+"Protein: repeats, RADAR score",False,True,True,True,True,True
+"Protein: low complexity, total amino acids",False,True,False,True,True,True
+"Protein: low complexity, fraction of protein",True,False,True,True,True,True
+"Protein: low complexity, length of longest",True,True,True,True,True,True
+"Protein: low complexity, fraction occupied by longest low complexity region",True,False,True,False,True,True
+"Protein: low complexity, regions",False,True,False,True,True,True
+"Protein: low complexity, regions larger than 5 amino acids",False,True,False,True,True,True
+"Protein: low complexity, regions larger than 10 amino acids",False,True,False,True,True,True
+"Protein: signal peptide, cmax score of SignalP",True,True,True,False,False,False
+"Protein: signal peptide, start position of mature protein",False,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: a431",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: a549",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: an3ca",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: bewo",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: bj",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: caco2",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: capan2",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: daudi",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: efo21",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: hacat",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: hek293",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: hela",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: hel",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: hepg2",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: hl60",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: hmc1",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: k562",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: karpas707",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: reh",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: mcf7",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: molt4",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: nb4",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: nes",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: ntera2",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: pc3",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: rh30",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: rpmi8226",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: rt4",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: sclc21h",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: shsy5y",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skbr3",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skmel30",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: t47d",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: thp1",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u138mg",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u2197",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u251mg",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u26684",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u266",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u2os",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u698",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u87",False,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: u937",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: wm115",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: kidney_a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: kidney_b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: kidney_c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: kidney_d",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: liver_a",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: liver_c",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: liver_d",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: pancreas_6a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: pancreas_6b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lung_3e",True,True,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lung_3f",True,True,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lung_4a",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lung_4d",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lung_4b",True,True,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: prostate_4a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: prostate_4b",True,False,False,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: prostate_4c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: prostate_a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: brain_3b",False,False,False,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: brain_3c",False,False,False,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: brain_a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: stomach_a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: stomach_3a",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: stomach_3b",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: spleen_3a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: spleen_3b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: spleen_3c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: spleen_3d",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lymphnode_4a",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lymphnode_4b",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lymphnode_5a",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lymphnode_5b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: lymphnode_5c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: appendices_4a",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: appendices_4b",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: appendices_4c",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: adrenal_4a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: adrenal_4c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: adrenal_4d",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fat_e",True,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fat_a.V1",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fat_x1.V2",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fat_8a",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fat_8b",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: endometrium_4a",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: endometrium_4b",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: endometrium_5a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: endometrium_8a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: endometrium_8b",True,True,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: placenta_3a",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: placenta_6a",True,True,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: placenta_6b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: placenta_6c",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: testis_4a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: testis_7a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: testis_7b",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: testis_7c",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: testis_7d",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: testis_7e",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: testis_7f",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: gallbladder_5a",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: gallbladder_5b",True,True,True,False,False,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: gallbladder_5c",True,True,True,False,False,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: urinarybladder_5c",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: urinarybladder_5b",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: thyroid_5a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: thyroid_5b",False,False,False,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: thyroid_5c",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: thyroid_5d",False,False,False,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: esophagus_5a",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: esophagus_5b",True,True,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: esophagus_5c",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: heart_5a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: heart_5b",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: heart_6a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: heart_6b",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skin_5e",False,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skin_5f",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skin_6a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: ovary_6a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: ovary_6b",False,False,False,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: ovary_8a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: bonemarrow_5a",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: bonemarrow_6a",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: bonemarrow_6b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: bonemarrow_6c",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: salivarygland_6a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: salivarygland_6b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: salivarygland_6c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skeletalmuscle_a",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skeletalmuscle_b",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skeletalmuscle_c",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skeletalmuscle_d",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: skeletalmuscle_e",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fallopiantube_5a",False,False,False,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fallopiantube_8b",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fallopiantube_8c",False,False,False,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fallopiantube_8d",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: fallopiantube_8e",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: tonsil_8a1",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: tonsil_8b1",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: tonsil_8e1",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: smoothmuscle_8a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: smoothmuscle_8b",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: smoothmuscle_8c",True,False,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: smallintestine_4a",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: smallintestine_4b",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: smallintestine_4c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: smallintestine_4d",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: duodenum_4b",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: duodenum_4c",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: colonrectum_a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: colonrectum_b",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: colonrectum_c",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: colonrectum_d",True,False,True,True,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: colonrectum_f",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: colon_8a",True,False,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: colon_8b",True,True,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: rectum_8a",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: rectum_8b",True,True,True,False,True,False
+"Uhlen et al., 2015: RNA expression, log10 FPKM: rectum_8c",True,True,True,False,True,True
+"Uhlen et al., 2015: RNA expression, log10 FPKM: rectum_8d",True,False,True,True,True,True
+"Uhlen et al., 2015: Fraction of cells with detected RNA (1 FPKM)",False,False,False,True,True,True
+"Uhlen et al., 2015: Fraction of tissues with detected RNA (1 FPKM)",False,False,False,True,True,True
+"Tani et al., 2012: RNA halflife",False,False,False,True,True,True

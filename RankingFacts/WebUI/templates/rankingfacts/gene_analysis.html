@@ -141,6 +141,54 @@
       padding: 1px 8px;
       margin-bottom: 4px;
     }
+    /* Global benchmark column group header */
+    .oracle-group-header {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      text-align: center;
+      padding: 7px 10px;
+      border-bottom: 2px solid transparent;
+    }
+    .oracle-group-header.local {
+      background: rgba(12,35,64,0.08);
+      color: var(--rf-navy);
+      border-bottom-color: var(--rf-navy);
+    }
+    .oracle-group-header.global {
+      background: rgba(241,90,34,0.08);
+      color: var(--rf-orange);
+      border-bottom-color: var(--rf-orange);
+    }
+    /* Global verdict cell — slightly muted vs local */
+    .global-verdict-cell {
+      text-align: center;
+      padding: 14px 8px;
+      min-width: 90px;
+      background: rgba(241,90,34,0.03);
+      border-left: none;
+    }
+    .global-badge-fair    { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 3px; display: inline-block; }
+    .global-badge-unfair  { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 3px; display: inline-block; }
+    .global-badge-na      { background: #f3f4f6; color: #9ca3af; border: 1px solid #e5e7eb; font-size: 0.68rem; font-weight: 600; padding: 2px 7px; border-radius: 3px; display: inline-block; }
+    /* Match indicator */
+    .match-icon-match   { color: #16a34a; font-size: 0.8rem; font-weight: 700; margin-top: 3px; display: block; }
+    .match-icon-diverge { color: var(--rf-orange); font-size: 0.8rem; font-weight: 700; margin-top: 3px; display: block; }
+    /* Match summary cell */
+    .match-summary-cell {
+      text-align: center;
+      padding: 10px 8px;
+      min-width: 60px;
+    }
+    .match-all    { color: #16a34a; font-weight: 700; font-size: 0.82rem; }
+    .match-some   { color: var(--rf-orange); font-weight: 700; font-size: 0.82rem; }
+    .match-none   { color: var(--rf-red); font-weight: 700; font-size: 0.82rem; }
+    .match-nodata { color: var(--rf-text-light); font-size: 0.78rem; }
+    /* Alignment stat */
+    .astat-val.align-good  { color: #86EFAC; }
+    .astat-val.align-warn  { color: var(--rf-orange); }
+    .astat-val.align-poor  { color: #FCA5A5; }
     @media (max-width: 900px) {
       .analysis-layout { grid-template-columns: 1fr; }
       .rf-sidebar { display: none; }
@@ -188,6 +236,13 @@
         <div class="sidebar-nav-dot" style="background:var(--rf-green);"></div>
         Fairness Analysis
       </a>
+      {% if alignment_total > 0 %}
+      <a href="#section-benchmark" class="sidebar-nav-item">
+        <div class="sidebar-nav-dot" style="background:var(--rf-orange);"></div>
+        Global Benchmark
+        <span class="rf-badge rf-badge-orange" style="margin-left:auto;font-size:0.65rem;">{{ alignment_matches }}/{{ alignment_total }}</span>
+      </a>
+      {% endif %}
     </div>
 
     <div class="divider" style="margin:0 20px;"></div>
@@ -262,6 +317,16 @@
         <div class="astat-val" style="font-size:1rem;font-family:monospace;">&alpha; = {{ alpha_default }}</div>
         <div class="astat-lbl">Significance Level</div>
       </div>
+      {% if alignment_total > 0 %}
+      <div class="astat">
+        {% with pct=alignment_matches|floatformat:0 %}
+        <div class="astat-val {% if alignment_matches == alignment_total %}align-good{% elif alignment_matches >= alignment_total|add:"-2" %}align-warn{% else %}align-poor{% endif %}" style="font-size:1.1rem;">
+          {{ alignment_matches }}/{{ alignment_total }}
+        </div>
+        {% endwith %}
+        <div class="astat-lbl">Global Alignment</div>
+      </div>
+      {% endif %}
       <div class="astat" style="margin-left:auto !important; border-right:none !important;">
         <a href="{% url 'rankingfacts:feature_select' %}" class="btn-rf-outline-orange btn-sm" style="border-color:rgba(241,90,34,0.6); color:var(--rf-orange);">
           &#9881; Re-select Features
@@ -389,17 +454,27 @@
           <table class="rf-fairness-table" style="width:100%;">
             <thead>
               <tr>
-                <th style="width:30%;">Gene Feature</th>
-                <th style="width:8%;">Value Group</th>
-                <th class="oracle-header" style="width:20%;">FA*IR</th>
-                <th class="oracle-header" style="width:20%;">Pairwise</th>
-                <th class="oracle-header" style="width:20%;">Proportion z-test</th>
+                <th rowspan="2" style="width:22%; vertical-align:bottom; padding-bottom:8px;">Gene Feature</th>
+                <th rowspan="2" style="width:7%; vertical-align:bottom; padding-bottom:8px;">Group</th>
+                <th colspan="3" class="oracle-group-header local">Your Dataset</th>
+                <th colspan="3" class="oracle-group-header global">Full Population Benchmark</th>
+                <th rowspan="2" class="oracle-header" style="width:6%; vertical-align:bottom; padding-bottom:8px;">Match</th>
+              </tr>
+              <tr>
+                <th class="oracle-header" style="background:rgba(12,35,64,0.05);">FA*IR</th>
+                <th class="oracle-header" style="background:rgba(12,35,64,0.05);">Pairwise</th>
+                <th class="oracle-header" style="background:rgba(12,35,64,0.05);">Proportion</th>
+                <th class="oracle-header" style="background:rgba(241,90,34,0.05);">FA*IR</th>
+                <th class="oracle-header" style="background:rgba(241,90,34,0.05);">Pairwise</th>
+                <th class="oracle-header" style="background:rgba(241,90,34,0.05);">Proportion</th>
               </tr>
             </thead>
             <tbody>
               {% for feat_row in fairness_table %}
                 {% if feat_row.val_rows %}
                   {% for vrow in feat_row.val_rows %}
+                  {% with mf=vrow.match_fair mp=vrow.match_pairwise mpr=vrow.match_proportion %}
+                  {% with n_match=0|add:0 %}
                   <tr class="{% if vrow.res_fair == 'unfair' or vrow.res_pairwise == 'unfair' or vrow.res_proportion == 'unfair' %}has-unfair{% else %}all-fair{% endif %}">
                     {% if forloop.first %}
                     <td class="rf-fairness-feature-cell" rowspan="{{ feat_row.val_rows|length }}">
@@ -408,50 +483,88 @@
                     </td>
                     {% endif %}
                     <td style="padding:10px 12px;">
-                      <span class="val-group-tag">
-                        val = {{ vrow.value }}
-                      </span>
+                      <span class="val-group-tag">val = {{ vrow.value }}</span>
                     </td>
-                    <!-- FA*IR -->
-                    <td class="verdict-cell">
-                      {% if vrow.res_fair == 'fair' %}
-                        <span class="rf-badge rf-badge-fair">FAIR</span>
-                      {% elif vrow.res_fair == 'unfair' %}
-                        <span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                      {% else %}
-                        <span class="rf-badge rf-badge-na">NA</span>
-                      {% endif %}
-                      {% if vrow.p_fair is not None %}
-                      <span class="p-val-text">p = {{ vrow.p_fair }}</span>
-                      {% endif %}
+
+                    <!-- LOCAL: FA*IR -->
+                    <td class="verdict-cell" style="background:rgba(12,35,64,0.02);">
+                      {% if vrow.res_fair == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
+                      {% elif vrow.res_fair == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
+                      {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
+                      {% if vrow.p_fair is not None %}<span class="p-val-text">p = {{ vrow.p_fair }}</span>{% endif %}
                     </td>
-                    <!-- Pairwise -->
-                    <td class="verdict-cell">
-                      {% if vrow.res_pairwise == 'fair' %}
-                        <span class="rf-badge rf-badge-fair">FAIR</span>
-                      {% elif vrow.res_pairwise == 'unfair' %}
-                        <span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                      {% else %}
-                        <span class="rf-badge rf-badge-na">NA</span>
-                      {% endif %}
-                      {% if vrow.p_pairwise is not None %}
-                      <span class="p-val-text">p = {{ vrow.p_pairwise }}</span>
-                      {% endif %}
+                    <!-- LOCAL: Pairwise -->
+                    <td class="verdict-cell" style="background:rgba(12,35,64,0.02);">
+                      {% if vrow.res_pairwise == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
+                      {% elif vrow.res_pairwise == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
+                      {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
+                      {% if vrow.p_pairwise is not None %}<span class="p-val-text">p = {{ vrow.p_pairwise }}</span>{% endif %}
                     </td>
-                    <!-- Proportion -->
-                    <td class="verdict-cell">
-                      {% if vrow.res_proportion == 'fair' %}
-                        <span class="rf-badge rf-badge-fair">FAIR</span>
-                      {% elif vrow.res_proportion == 'unfair' %}
-                        <span class="rf-badge rf-badge-unfair">UNFAIR</span>
+                    <!-- LOCAL: Proportion -->
+                    <td class="verdict-cell" style="background:rgba(12,35,64,0.02);">
+                      {% if vrow.res_proportion == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
+                      {% elif vrow.res_proportion == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
+                      {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
+                      {% if vrow.p_proportion is not None %}<span class="p-val-text">p = {{ vrow.p_proportion }}</span>{% endif %}
+                    </td>
+
+                    <!-- GLOBAL: FA*IR -->
+                    <td class="global-verdict-cell">
+                      {% if vrow.has_global %}
+                        {% if vrow.g_fair == 'fair' %}<span class="global-badge-fair">FAIR</span>
+                        {% elif vrow.g_fair == 'unfair' %}<span class="global-badge-unfair">UNFAIR</span>
+                        {% else %}<span class="global-badge-na">NA</span>{% endif %}
+                        {% if vrow.match_fair == 'match' %}<span class="match-icon-match">✓</span>
+                        {% elif vrow.match_fair == 'diverge' %}<span class="match-icon-diverge">⚠</span>{% endif %}
+                      {% else %}<span class="global-badge-na">—</span>{% endif %}
+                    </td>
+                    <!-- GLOBAL: Pairwise -->
+                    <td class="global-verdict-cell">
+                      {% if vrow.has_global %}
+                        {% if vrow.g_pairwise == 'fair' %}<span class="global-badge-fair">FAIR</span>
+                        {% elif vrow.g_pairwise == 'unfair' %}<span class="global-badge-unfair">UNFAIR</span>
+                        {% else %}<span class="global-badge-na">NA</span>{% endif %}
+                        {% if vrow.match_pairwise == 'match' %}<span class="match-icon-match">✓</span>
+                        {% elif vrow.match_pairwise == 'diverge' %}<span class="match-icon-diverge">⚠</span>{% endif %}
+                      {% else %}<span class="global-badge-na">—</span>{% endif %}
+                    </td>
+                    <!-- GLOBAL: Proportion -->
+                    <td class="global-verdict-cell">
+                      {% if vrow.has_global %}
+                        {% if vrow.g_proportion == 'fair' %}<span class="global-badge-fair">FAIR</span>
+                        {% elif vrow.g_proportion == 'unfair' %}<span class="global-badge-unfair">UNFAIR</span>
+                        {% else %}<span class="global-badge-na">NA</span>{% endif %}
+                        {% if vrow.match_proportion == 'match' %}<span class="match-icon-match">✓</span>
+                        {% elif vrow.match_proportion == 'diverge' %}<span class="match-icon-diverge">⚠</span>{% endif %}
+                      {% else %}<span class="global-badge-na">—</span>{% endif %}
+                    </td>
+
+                    <!-- MATCH SUMMARY -->
+                    <td class="match-summary-cell">
+                      {% if vrow.has_global %}
+                        {% with all3=vrow.match_fair|add:vrow.match_pairwise %}
+                        {% if vrow.match_fair == 'match' and vrow.match_pairwise == 'match' and vrow.match_proportion == 'match' %}
+                          <span class="match-all">3/3</span>
+                        {% elif vrow.match_fair == 'diverge' and vrow.match_pairwise == 'diverge' and vrow.match_proportion == 'diverge' %}
+                          <span class="match-none">0/3</span>
+                        {% else %}
+                          {% with mc=0 %}
+                          <span class="match-some">
+                            {% if vrow.match_fair == 'match' %}{% with mc=mc|add:1 %}{% endwith %}{% endif %}
+                            {% if vrow.match_pairwise == 'match' %}{% with mc=mc|add:1 %}{% endwith %}{% endif %}
+                            {% if vrow.match_proportion == 'match' %}{% with mc=mc|add:1 %}{% endwith %}{% endif %}
+                            ~
+                          </span>
+                          {% endwith %}
+                        {% endif %}
+                        {% endwith %}
                       {% else %}
-                        <span class="rf-badge rf-badge-na">NA</span>
-                      {% endif %}
-                      {% if vrow.p_proportion is not None %}
-                      <span class="p-val-text">p = {{ vrow.p_proportion }}</span>
+                        <span class="match-nodata">—</span>
                       {% endif %}
                     </td>
                   </tr>
+                  {% endwith %}
+                  {% endwith %}
                   {% endfor %}
                 {% else %}
                 <tr>
@@ -460,12 +573,12 @@
                     <span class="feat-group-label">{{ feat_row.study }}</span>
                   </td>
                   <td>—</td>
-                  <td colspan="3" class="no-data-row">Feature not found in dataset or no valid values.</td>
+                  <td colspan="7" class="no-data-row">Feature not found in dataset or no valid values.</td>
                 </tr>
                 {% endif %}
               {% empty %}
               <tr>
-                <td colspan="5" style="text-align:center;padding:32px;color:var(--rf-text-muted);">
+                <td colspan="9" style="text-align:center;padding:32px;color:var(--rf-text-muted);">
                   No features selected. <a href="{% url 'rankingfacts:feature_select' %}">Select features</a> to run fairness analysis.
                 </td>
               </tr>
@@ -475,11 +588,14 @@
         </div>
 
         <div class="rf-card-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span>
-            <strong>Legend:</strong>
-            <span class="rf-badge rf-badge-fair" style="margin:0 4px;">FAIR</span> p &gt; {{ alpha_default }} &nbsp;
-            <span class="rf-badge rf-badge-unfair" style="margin:0 4px;">UNFAIR</span> p &le; {{ alpha_default }} &nbsp;
-            <span class="rf-badge rf-badge-na" style="margin:0 4px;">NA</span> not computable
+          <span style="font-size:0.78rem;">
+            <strong>Local:</strong>
+            <span class="rf-badge rf-badge-fair" style="margin:0 3px;">FAIR</span> p &gt; {{ alpha_default }} &nbsp;
+            <span class="rf-badge rf-badge-unfair" style="margin:0 3px;">UNFAIR</span> p &le; {{ alpha_default }}
+            &nbsp;&nbsp;
+            <strong>Benchmark:</strong>
+            <span class="match-icon-match" style="display:inline;font-size:0.78rem;">✓</span> agrees &nbsp;
+            <span class="match-icon-diverge" style="display:inline;font-size:0.78rem;">⚠</span> diverges from full population
           </span>
           <a href="{% url 'rankingfacts:feature_select' %}" class="btn-rf-outline-orange btn-sm">
             &#9881; Change Features &amp; Re-run
@@ -487,6 +603,56 @@
         </div>
       </div>
     </div>
+
+    <!-- ── Section 4: Global Benchmark Summary ── -->
+    {% if alignment_total > 0 %}
+    <div class="analysis-section section-anchor" id="section-benchmark">
+      <div class="rf-card">
+        <div class="rf-card-header">
+          <div class="flex items-center gap-12">
+            <h4>Global Benchmark Comparison</h4>
+            <span class="rf-badge rf-badge-orange">{{ alignment_matches }}/{{ alignment_total }} aligned</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--rf-text-muted);">
+            Full-population fairness report &bull; ~400 genes, all features
+          </div>
+        </div>
+        <div style="padding:20px 24px;">
+          <p style="font-size:0.85rem;color:var(--rf-text-muted);margin-bottom:16px;line-height:1.6;">
+            The <strong>Full Population Benchmark</strong> was computed by a researcher on the complete gene dataset
+            across all features. The table above compares your local ranking's oracle verdicts to those global results.
+            A <span class="match-icon-match" style="display:inline;">✓</span> means your dataset agrees with the
+            full-population finding; a <span class="match-icon-diverge" style="display:inline;">⚠</span> means your
+            local subset diverges — which may indicate that your ranked subset has different fairness properties than
+            the broader population.
+          </p>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;">
+            <div style="background:var(--rf-bg);border:1px solid var(--rf-border);border-radius:var(--rf-radius);padding:16px 24px;text-align:center;min-width:140px;">
+              <div style="font-size:1.8rem;font-weight:700;color:#16a34a;">{{ alignment_matches }}</div>
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--rf-text-muted);margin-top:4px;">Oracle Checks Agree</div>
+            </div>
+            <div style="background:var(--rf-bg);border:1px solid var(--rf-border);border-radius:var(--rf-radius);padding:16px 24px;text-align:center;min-width:140px;">
+              <div style="font-size:1.8rem;font-weight:700;color:var(--rf-orange);">{{ alignment_total|add:"-0" }}</div>
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--rf-text-muted);margin-top:4px;">Total Comparable Checks</div>
+            </div>
+            {% with diverge_count=alignment_total|add:alignment_matches %}
+            <div style="background:var(--rf-bg);border:1px solid var(--rf-border);border-radius:var(--rf-radius);padding:16px 24px;text-align:center;min-width:140px;">
+              <div style="font-size:1.8rem;font-weight:700;color:{% if alignment_matches == alignment_total %}#16a34a{% else %}var(--rf-orange){% endif %};">
+                {% widthratio alignment_matches alignment_total 100 %}%
+              </div>
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--rf-text-muted);margin-top:4px;">Alignment Rate</div>
+            </div>
+            {% endwith %}
+          </div>
+          <p style="font-size:0.78rem;color:var(--rf-text-light);margin-top:16px;">
+            Source: <em>fairness_repor_metric_1_all_genes.csv</em> &bull;
+            Columns: FAIR_g0/g1, Pairwise_g0/g1, Proportion_g0/g1 &bull;
+            g0 = feature value 0, g1 = feature value 1
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
     <div style="height:40px;"></div>
 
