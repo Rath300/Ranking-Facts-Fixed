@@ -135,19 +135,27 @@ def _oracle_display(p_value, verdict):
     if verdict == 'na' or p_value is None:
         return {'is_na': True, 'size': 0, 'color': None, 'p': None}
 
-    p_clamped = max(0.001, min(1.0, float(p_value)))
-    log_val   = -math.log2(p_clamped)           # 0 … ≈9.97
-    max_log   = -math.log2(0.001)               # ≈9.97
-    t         = min(1.0, log_val / max_log)     # 0 = most fair, 1 = most unfair
+    # Cap at p=0.005 so anything ≤ 0.005 is full red — prevents washing out low p-values.
+    P_MIN   = 0.005
+    ALPHA   = 0.05                                   # significance threshold
+    p_clamped = max(P_MIN, min(1.0, float(p_value)))
+    log_val   = -math.log2(p_clamped)               # 0 … 7.64
+    max_log   = -math.log2(P_MIN)                   # ≈ 7.64
+    t         = min(1.0, log_val / max_log)          # 0 = fair, 1 = unfair
 
-    size  = round(8 + t * 24)                   # 8px … 32px
+    # Threshold sits at t_thresh in this scale
+    t_thresh = -math.log2(ALPHA) / max_log           # ≈ 0.565
 
-    # Colour: green (hsl 100°) → yellow (hsl 55°) → red (hsl 0°)
-    # Yellow sits near t≈0.43 (p=0.05 threshold) so the boundary is obvious.
-    # We push the hue curve so yellow is centred on the threshold.
-    hue   = round(100 * (1.0 - t) ** 0.7)      # 100° (green) … 0° (red), yellow ≈ midpoint
-    sat   = round(75 + t * 10)                  # 75% … 85%  (gets punchier toward red)
-    light = round(42 - t * 8)                   # 42% … 34%  (gets darker toward extremes)
+    # Piecewise hue: green(100°) → yellow(55°) at threshold → red(0°) at p_min
+    if t <= t_thresh:
+        hue = round(100 - 45 * (t / t_thresh))       # 100° … 55°
+    else:
+        hue = round(55 * (1 - (t - t_thresh) / (1 - t_thresh)))  # 55° … 0°
+    hue = max(0, hue)
+
+    size  = round(8 + t * 24)                        # 8px … 32px
+    sat   = round(78 + t * 7)                        # 78% … 85%
+    light = round(40 - t * 6)                        # 40% … 34%
     color = f'hsl({hue},{sat}%,{light}%)'
 
     return {'is_na': False, 'size': size, 'color': color, 'p': p_value}
