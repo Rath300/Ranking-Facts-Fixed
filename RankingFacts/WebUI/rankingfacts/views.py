@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import random
 import pandas as pd
@@ -122,25 +123,29 @@ def _simulate_p_value(verdict):
 
 def _oracle_display(p_value, verdict):
     """
-    Returns a display dict for shape rendering in the template.
-    Shape = circle (fair) or triangle (unfair), sized and colored by intensity.
-      Level 4 — Really FAIR     : large (30px) dark green  circle  (p > 0.5)
-      Level 3 — Slightly FAIR   : small (20px) light green circle  (0.05 < p ≤ 0.5)
-      Level 2 — Slightly UNFAIR : small (20px) light red   triangle (0.01 < p ≤ 0.05)
-      Level 1 — Really UNFAIR   : large (30px) dark red    triangle (p ≤ 0.01)
+    Returns a display dict for a single circle whose size and color both follow
+    a continuous -log2(p) gradient:
+      Small + green  →  fair     (p near 1.0)
+      Large + red    →  unfair   (p near 0.0)
+
+    t = -log2(p) / -log2(0.001)   normalised to [0, 1]
+    size : 8px (t=0, fair) → 32px (t=1, unfair)
+    color: hsl(120°→0°)  green → yellow → red
     """
     if verdict == 'na' or p_value is None:
-        return {'shape': 'na', 'level': 0, 'color': None, 'size': 14, 'p': None}
-    if verdict == 'fair':
-        if p_value > 0.5:
-            return {'shape': 'circle',   'level': 4, 'color': '#15803d', 'size': 30, 'p': p_value}
-        else:
-            return {'shape': 'circle',   'level': 3, 'color': '#4ade80', 'size': 20, 'p': p_value}
-    else:
-        if p_value <= 0.01:
-            return {'shape': 'triangle', 'level': 1, 'color': '#b91c1c', 'size': 30, 'p': p_value}
-        else:
-            return {'shape': 'triangle', 'level': 2, 'color': '#f87171', 'size': 20, 'p': p_value}
+        return {'is_na': True, 'size': 0, 'color': None, 'p': None}
+
+    p_clamped = max(0.001, min(1.0, float(p_value)))
+    log_val   = -math.log2(p_clamped)           # 0 … ≈9.97
+    max_log   = -math.log2(0.001)               # ≈9.97
+    t         = min(1.0, log_val / max_log)     # 0 = most fair, 1 = most unfair
+
+    size  = round(8 + t * 24)                   # 8px … 32px
+    hue   = round(120 * (1.0 - t))              # 120° (green) … 0° (red)
+    light = round(35 + t * 8)                   # 35% … 43%
+    color = f'hsl({hue},65%,{light}%)'
+
+    return {'is_na': False, 'size': size, 'color': color, 'p': p_value}
 
 
 def _load_global_benchmark():

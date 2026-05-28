@@ -566,43 +566,46 @@
         </div>
 
         <!-- Legend -->
-        <div class="rf-card-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-            <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--rf-text-muted);">Scale</span>
-            <!-- Really Fair -->
-            <div style="display:flex;align-items:center;gap:6px;">
-              <svg width="18" height="18" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#15803d"/></svg>
-              <span style="font-size:0.75rem;color:var(--rf-text);">Really FAIR <span style="color:var(--rf-text-muted);">(p &gt; 0.5)</span></span>
+        <div class="rf-card-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+
+            <!-- Gradient scale -->
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--rf-text-muted);">Color &amp; Size Scale (–log₂ p)</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <!-- Small green = fair -->
+                <svg width="8" height="8" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(120,65%,35%)"/></svg>
+                <!-- gradient bar -->
+                <div style="width:120px;height:10px;border-radius:5px;
+                     background:linear-gradient(to right,hsl(120,65%,35%),hsl(90,65%,37%),hsl(60,65%,39%),hsl(30,65%,40%),hsl(0,65%,43%));
+                     border:1px solid var(--rf-border);"></div>
+                <!-- Large red = unfair -->
+                <svg width="22" height="22" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(0,65%,43%)"/></svg>
+              </div>
+              <div style="display:flex;justify-content:space-between;width:158px;">
+                <span style="font-size:0.68rem;color:var(--rf-text-muted);">FAIR (p → 1)</span>
+                <span style="font-size:0.68rem;color:var(--rf-text-muted);">UNFAIR (p → 0)</span>
+              </div>
             </div>
-            <!-- Slightly Fair -->
-            <div style="display:flex;align-items:center;gap:6px;">
-              <svg width="13" height="13" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#4ade80"/></svg>
-              <span style="font-size:0.75rem;color:var(--rf-text);">Slightly FAIR <span style="color:var(--rf-text-muted);">(p &gt; 0.05)</span></span>
-            </div>
-            <!-- Slightly Unfair -->
-            <div style="display:flex;align-items:center;gap:6px;">
-              <svg width="13" height="13" viewBox="0 0 30 26"><polygon points="15,1 29,25 1,25" fill="#f87171"/></svg>
-              <span style="font-size:0.75rem;color:var(--rf-text);">Slightly UNFAIR <span style="color:var(--rf-text-muted);">(p &le; 0.05)</span></span>
-            </div>
-            <!-- Really Unfair -->
-            <div style="display:flex;align-items:center;gap:6px;">
-              <svg width="18" height="16" viewBox="0 0 30 26"><polygon points="15,1 29,25 1,25" fill="#b91c1c"/></svg>
-              <span style="font-size:0.75rem;color:var(--rf-text);">Really UNFAIR <span style="color:var(--rf-text-muted);">(p &le; 0.01)</span></span>
-            </div>
+
             <!-- NA -->
-            <div style="display:flex;align-items:center;gap:6px;">
+            <div style="display:flex;align-items:center;gap:6px;border-left:1px solid var(--rf-border);padding-left:20px;">
               <span style="font-size:0.9rem;color:var(--rf-text-light);">—</span>
-              <span style="font-size:0.75rem;color:var(--rf-text-muted);">Not computable / no benchmark data</span>
+              <span style="font-size:0.75rem;color:var(--rf-text-muted);">Not computable</span>
             </div>
+
             <!-- Group signs -->
-            <div style="display:flex;align-items:center;gap:6px;border-left:1px solid var(--rf-border);padding-left:16px;">
-              <span class="val-sign-tag val-sign-plus" style="width:22px;height:22px;font-size:0.85rem;">+</span>
-              <span style="font-size:0.75rem;color:var(--rf-text-muted);">feature = 1</span>
+            <div style="display:flex;align-items:center;gap:10px;border-left:1px solid var(--rf-border);padding-left:20px;">
+              <div style="display:flex;align-items:center;gap:5px;">
+                <span class="val-sign-tag val-sign-plus" style="width:22px;height:22px;font-size:0.85rem;">+</span>
+                <span style="font-size:0.75rem;color:var(--rf-text-muted);">feature = 1</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <span class="val-sign-tag val-sign-minus" style="width:22px;height:22px;font-size:0.85rem;">−</span>
+                <span style="font-size:0.75rem;color:var(--rf-text-muted);">feature = 0</span>
+              </div>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span class="val-sign-tag val-sign-minus" style="width:22px;height:22px;font-size:0.85rem;">−</span>
-              <span style="font-size:0.75rem;color:var(--rf-text-muted);">feature = 0</span>
-            </div>
+
           </div>
           <a href="{% url 'rankingfacts:feature_select' %}" class="btn-rf-outline-orange btn-sm">
             &#9881; Change Features &amp; Re-run
