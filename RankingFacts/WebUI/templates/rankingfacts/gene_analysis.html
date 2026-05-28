@@ -485,13 +485,13 @@
                 <th rowspan="2" style="width:22%; vertical-align:bottom; padding-bottom:8px;">Gene Feature</th>
                 <th rowspan="2" style="width:5%; vertical-align:bottom; padding-bottom:8px; text-align:center;">Group</th>
                 <th colspan="3" class="oracle-group-header local">Your Dataset</th>
-                <th colspan="3" class="oracle-group-header global">Full Population Benchmark</th>
+                <th colspan="3" class="oracle-group-header global" style="border-left:3px solid #F15A22;">Full Population Benchmark</th>
               </tr>
               <tr>
                 <th class="oracle-sub-header local">FA*IR</th>
                 <th class="oracle-sub-header local">Pairwise</th>
                 <th class="oracle-sub-header local">Proportion</th>
-                <th class="oracle-sub-header global">FA*IR</th>
+                <th class="oracle-sub-header global" style="border-left:3px solid #F15A22;">FA*IR</th>
                 <th class="oracle-sub-header global">Pairwise</th>
                 <th class="oracle-sub-header global">Proportion</th>
               </tr>
@@ -531,7 +531,7 @@
                     </td>
 
                     <!-- GLOBAL: FA*IR -->
-                    <td class="global-verdict-cell">
+                    <td class="global-verdict-cell" style="border-left:3px solid rgba(241,90,34,0.35);">
                       {% include "rankingfacts/_shape_cell.html" with d=vrow.g_fair_d %}
                     </td>
                     <!-- GLOBAL: Pairwise -->
@@ -551,7 +551,8 @@
                     <span class="feat-group-label">{{ feat_row.study }}</span>
                   </td>
                   <td>—</td>
-                  <td colspan="6" class="no-data-row">Feature not found in dataset or no valid values.</td>
+                  <td colspan="3" class="no-data-row">Feature not found in dataset or no valid values.</td>
+                  <td colspan="3" class="no-data-row" style="border-left:3px solid rgba(241,90,34,0.35);">—</td>
                 </tr>
                 {% endif %}
               {% empty %}

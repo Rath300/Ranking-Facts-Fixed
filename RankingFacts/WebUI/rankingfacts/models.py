@@ -207,7 +207,7 @@ def runFairOracles(chosed_atts, current_file, alpha_default=0.05, k_threshold=20
     for si in chosed_atts:
         if si not in data.columns:
             continue
-        values_si_att = list(data[si].dropna().unique())
+        values_si_att = sorted(data[si].dropna().unique(), reverse=True)  # 1 before 0
         si_value_json = {}
         si_fair_json = {}
 
