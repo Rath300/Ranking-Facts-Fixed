@@ -198,6 +198,36 @@
     .astat-val.align-good  { color: #86EFAC; }
     .astat-val.align-warn  { color: #FFB38A; }
     .astat-val.align-poor  { color: #FCA5A5; }
+    /* Shape cells */
+    .shape-cell-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .shape-p-text {
+      font-family: 'Courier New', monospace;
+      font-size: 0.65rem;
+      color: var(--rf-text-muted);
+      display: block;
+      text-align: center;
+    }
+    .shape-na { color: var(--rf-text-light); font-size: 0.85rem; }
+    /* Sign tag (+/-) replacing val=0/1 */
+    .val-sign-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .val-sign-plus  { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .val-sign-minus { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
     @media (max-width: 900px) {
       .analysis-layout { grid-template-columns: 1fr; }
       .rf-sidebar { display: none; }
@@ -307,17 +337,6 @@
         <div class="astat-val orange">{{ selected_count }}</div>
         <div class="astat-lbl">Features Analyzed</div>
       </div>
-      {% if repeated_count > 0 %}
-      <div class="astat">
-        <div class="astat-val red">{{ repeated_count }}</div>
-        <div class="astat-lbl">Repeated Genes</div>
-      </div>
-      {% else %}
-      <div class="astat">
-        <div class="astat-val" style="color:#86EFAC;">0</div>
-        <div class="astat-lbl">Repeated Genes</div>
-      </div>
-      {% endif %}
       <div class="astat">
         <div class="astat-val">{{ top_K }}</div>
         <div class="astat-lbl">Top-K Threshold</div>
@@ -464,10 +483,9 @@
             <thead>
               <tr>
                 <th rowspan="2" style="width:22%; vertical-align:bottom; padding-bottom:8px;">Gene Feature</th>
-                <th rowspan="2" style="width:7%; vertical-align:bottom; padding-bottom:8px;">Group</th>
+                <th rowspan="2" style="width:5%; vertical-align:bottom; padding-bottom:8px; text-align:center;">Group</th>
                 <th colspan="3" class="oracle-group-header local">Your Dataset</th>
                 <th colspan="3" class="oracle-group-header global">Full Population Benchmark</th>
-                <th rowspan="2" class="oracle-sub-header match" style="width:6%; vertical-align:bottom; padding-bottom:8px;">Match</th>
               </tr>
               <tr>
                 <th class="oracle-sub-header local">FA*IR</th>
@@ -482,87 +500,49 @@
               {% for feat_row in fairness_table %}
                 {% if feat_row.val_rows %}
                   {% for vrow in feat_row.val_rows %}
-                  {% with mf=vrow.match_fair mp=vrow.match_pairwise mpr=vrow.match_proportion %}
-                  <tr class="{% if vrow.res_fair == 'unfair' or vrow.res_pairwise == 'unfair' or vrow.res_proportion == 'unfair' %}has-unfair{% else %}all-fair{% endif %}">
+                  <tr class="{% if vrow.has_unfair %}has-unfair{% else %}all-fair{% endif %}">
                     {% if forloop.first %}
                     <td class="rf-fairness-feature-cell" rowspan="{{ feat_row.val_rows|length }}">
                       <span class="rf-fairness-feature-name">{{ feat_row.label }}</span>
                       <span class="feat-group-label">{{ feat_row.study }}</span>
                     </td>
                     {% endif %}
-                    <td style="padding:10px 12px;">
-                      <span class="val-group-tag">val = {{ vrow.value }}</span>
+
+                    <!-- Group sign: + for val=1, − for val=0 -->
+                    <td style="padding:10px 8px; text-align:center;">
+                      {% if vrow.sign == '+' %}
+                        <span class="val-sign-tag val-sign-plus">+</span>
+                      {% else %}
+                        <span class="val-sign-tag val-sign-minus">−</span>
+                      {% endif %}
                     </td>
 
                     <!-- LOCAL: FA*IR -->
                     <td class="verdict-cell" style="background:rgba(12,35,64,0.02);">
-                      {% if vrow.res_fair == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
-                      {% elif vrow.res_fair == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                      {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
-                      {% if vrow.p_fair is not None %}<span class="p-val-text">p = {{ vrow.p_fair }}</span>{% endif %}
+                      {% include "rankingfacts/_shape_cell.html" with d=vrow.fair_d %}
                     </td>
                     <!-- LOCAL: Pairwise -->
                     <td class="verdict-cell" style="background:rgba(12,35,64,0.02);">
-                      {% if vrow.res_pairwise == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
-                      {% elif vrow.res_pairwise == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                      {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
-                      {% if vrow.p_pairwise is not None %}<span class="p-val-text">p = {{ vrow.p_pairwise }}</span>{% endif %}
+                      {% include "rankingfacts/_shape_cell.html" with d=vrow.pairwise_d %}
                     </td>
                     <!-- LOCAL: Proportion -->
                     <td class="verdict-cell" style="background:rgba(12,35,64,0.02);">
-                      {% if vrow.res_proportion == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
-                      {% elif vrow.res_proportion == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                      {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
-                      {% if vrow.p_proportion is not None %}<span class="p-val-text">p = {{ vrow.p_proportion }}</span>{% endif %}
+                      {% include "rankingfacts/_shape_cell.html" with d=vrow.proportion_d %}
                     </td>
 
                     <!-- GLOBAL: FA*IR -->
                     <td class="global-verdict-cell">
-                      {% if vrow.has_global %}
-                        {% if vrow.g_fair == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
-                        {% elif vrow.g_fair == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                        {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
-                        {% if vrow.match_fair == 'match' %}<span class="match-icon-match">✓</span>
-                        {% elif vrow.match_fair == 'diverge' %}<span class="match-icon-diverge">⚠</span>{% endif %}
-                      {% else %}<span class="rf-badge rf-badge-na">—</span>{% endif %}
+                      {% include "rankingfacts/_shape_cell.html" with d=vrow.g_fair_d %}
                     </td>
                     <!-- GLOBAL: Pairwise -->
                     <td class="global-verdict-cell">
-                      {% if vrow.has_global %}
-                        {% if vrow.g_pairwise == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
-                        {% elif vrow.g_pairwise == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                        {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
-                        {% if vrow.match_pairwise == 'match' %}<span class="match-icon-match">✓</span>
-                        {% elif vrow.match_pairwise == 'diverge' %}<span class="match-icon-diverge">⚠</span>{% endif %}
-                      {% else %}<span class="rf-badge rf-badge-na">—</span>{% endif %}
+                      {% include "rankingfacts/_shape_cell.html" with d=vrow.g_pairwise_d %}
                     </td>
                     <!-- GLOBAL: Proportion -->
                     <td class="global-verdict-cell">
-                      {% if vrow.has_global %}
-                        {% if vrow.g_proportion == 'fair' %}<span class="rf-badge rf-badge-fair">FAIR</span>
-                        {% elif vrow.g_proportion == 'unfair' %}<span class="rf-badge rf-badge-unfair">UNFAIR</span>
-                        {% else %}<span class="rf-badge rf-badge-na">NA</span>{% endif %}
-                        {% if vrow.match_proportion == 'match' %}<span class="match-icon-match">✓</span>
-                        {% elif vrow.match_proportion == 'diverge' %}<span class="match-icon-diverge">⚠</span>{% endif %}
-                      {% else %}<span class="rf-badge rf-badge-na">—</span>{% endif %}
-                    </td>
-
-                    <!-- MATCH SUMMARY: uses Python-computed match_count / comparable_count -->
-                    <td class="match-summary-cell">
-                      {% if vrow.has_global and vrow.comparable_count > 0 %}
-                        {% if vrow.match_count == vrow.comparable_count %}
-                          <span class="match-all">{{ vrow.match_count }}/{{ vrow.comparable_count }}</span>
-                        {% elif vrow.match_count == 0 %}
-                          <span class="match-none">0/{{ vrow.comparable_count }}</span>
-                        {% else %}
-                          <span class="match-some">{{ vrow.match_count }}/{{ vrow.comparable_count }}</span>
-                        {% endif %}
-                      {% else %}
-                        <span class="match-nodata">—</span>
-                      {% endif %}
+                      {% include "rankingfacts/_shape_cell.html" with d=vrow.g_proportion_d %}
                     </td>
                   </tr>
-                  {% endwith %}
                   {% endfor %}
                 {% else %}
                 <tr>
@@ -571,12 +551,12 @@
                     <span class="feat-group-label">{{ feat_row.study }}</span>
                   </td>
                   <td>—</td>
-                  <td colspan="7" class="no-data-row">Feature not found in dataset or no valid values.</td>
+                  <td colspan="6" class="no-data-row">Feature not found in dataset or no valid values.</td>
                 </tr>
                 {% endif %}
               {% empty %}
               <tr>
-                <td colspan="9" style="text-align:center;padding:32px;color:var(--rf-text-muted);">
+                <td colspan="8" style="text-align:center;padding:32px;color:var(--rf-text-muted);">
                   No features selected. <a href="{% url 'rankingfacts:feature_select' %}">Select features</a> to run fairness analysis.
                 </td>
               </tr>
@@ -585,16 +565,45 @@
           </table>
         </div>
 
-        <div class="rf-card-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span style="font-size:0.78rem;">
-            <strong>Local:</strong>
-            <span class="rf-badge rf-badge-fair" style="margin:0 3px;">FAIR</span> p &gt; {{ alpha_default }} &nbsp;
-            <span class="rf-badge rf-badge-unfair" style="margin:0 3px;">UNFAIR</span> p &le; {{ alpha_default }}
-            &nbsp;&nbsp;
-            <strong>Benchmark:</strong>
-            <span class="match-icon-match" style="display:inline;font-size:0.78rem;">✓</span> agrees &nbsp;
-            <span class="match-icon-diverge" style="display:inline;font-size:0.78rem;">⚠</span> diverges from full population
-          </span>
+        <!-- Legend -->
+        <div class="rf-card-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+            <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--rf-text-muted);">Scale</span>
+            <!-- Really Fair -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <svg width="18" height="18" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#15803d"/></svg>
+              <span style="font-size:0.75rem;color:var(--rf-text);">Really FAIR <span style="color:var(--rf-text-muted);">(p &gt; 0.5)</span></span>
+            </div>
+            <!-- Slightly Fair -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#4ade80"/></svg>
+              <span style="font-size:0.75rem;color:var(--rf-text);">Slightly FAIR <span style="color:var(--rf-text-muted);">(p &gt; 0.05)</span></span>
+            </div>
+            <!-- Slightly Unfair -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 30 26"><polygon points="15,1 29,25 1,25" fill="#f87171"/></svg>
+              <span style="font-size:0.75rem;color:var(--rf-text);">Slightly UNFAIR <span style="color:var(--rf-text-muted);">(p &le; 0.05)</span></span>
+            </div>
+            <!-- Really Unfair -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <svg width="18" height="16" viewBox="0 0 30 26"><polygon points="15,1 29,25 1,25" fill="#b91c1c"/></svg>
+              <span style="font-size:0.75rem;color:var(--rf-text);">Really UNFAIR <span style="color:var(--rf-text-muted);">(p &le; 0.01)</span></span>
+            </div>
+            <!-- NA -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:0.9rem;color:var(--rf-text-light);">—</span>
+              <span style="font-size:0.75rem;color:var(--rf-text-muted);">Not computable / no benchmark data</span>
+            </div>
+            <!-- Group signs -->
+            <div style="display:flex;align-items:center;gap:6px;border-left:1px solid var(--rf-border);padding-left:16px;">
+              <span class="val-sign-tag val-sign-plus" style="width:22px;height:22px;font-size:0.85rem;">+</span>
+              <span style="font-size:0.75rem;color:var(--rf-text-muted);">feature = 1</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="val-sign-tag val-sign-minus" style="width:22px;height:22px;font-size:0.85rem;">−</span>
+              <span style="font-size:0.75rem;color:var(--rf-text-muted);">feature = 0</span>
+            </div>
+          </div>
           <a href="{% url 'rankingfacts:feature_select' %}" class="btn-rf-outline-orange btn-sm">
             &#9881; Change Features &amp; Re-run
           </a>

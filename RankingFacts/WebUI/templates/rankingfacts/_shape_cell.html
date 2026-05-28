@@ -1,0 +1,27 @@
+{% comment %}
+Shape cell partial — render a fairness verdict as a sized, colored circle or triangle.
+Usage: {% include "rankingfacts/_shape_cell.html" with d=vrow.fair_d %}
+d = {'shape': 'circle'|'triangle'|'na', 'level': 1-4, 'color': '#hex', 'size': int, 'p': float|None}
+  Level 4 — Really FAIR     : large dark green circle   (p > 0.5)
+  Level 3 — Slightly FAIR   : small light green circle  (0.05 < p ≤ 0.5)
+  Level 2 — Slightly UNFAIR : small light red triangle  (0.01 < p ≤ 0.05)
+  Level 1 — Really UNFAIR   : large dark red triangle   (p ≤ 0.01)
+{% endcomment %}
+<div class="shape-cell-inner">
+  {% if d.shape == 'circle' %}
+    <svg width="{{ d.size }}" height="{{ d.size }}" viewBox="0 0 30 30"
+         style="display:block;margin:0 auto;" aria-label="Fair level {{ d.level }}">
+      <circle cx="15" cy="15" r="13" fill="{{ d.color }}"/>
+    </svg>
+  {% elif d.shape == 'triangle' %}
+    <svg width="{{ d.size }}" height="{{ d.size }}" viewBox="0 0 30 26"
+         style="display:block;margin:0 auto;" aria-label="Unfair level {{ d.level }}">
+      <polygon points="15,1 29,25 1,25" fill="{{ d.color }}"/>
+    </svg>
+  {% else %}
+    <span class="shape-na">—</span>
+  {% endif %}
+  {% if d.p is not None %}
+    <span class="shape-p-text">p={{ d.p }}</span>
+  {% endif %}
+</div>

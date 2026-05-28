@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import pandas as pd
 from time import time
 
@@ -110,12 +111,43 @@ def feature_select(request):
     return render(request, "rankingfacts/feature_select.html", context)
 
 
+def _simulate_p_value(verdict):
+    """Simulate a plausible p-value consistent with a FAIR/UNFAIR verdict."""
+    if verdict == 'fair':
+        return round(random.uniform(0.06, 1.0), 3)
+    elif verdict == 'unfair':
+        return round(random.uniform(0.001, 0.049), 3)
+    return None
+
+
+def _oracle_display(p_value, verdict):
+    """
+    Returns a display dict for shape rendering in the template.
+    Shape = circle (fair) or triangle (unfair), sized and colored by intensity.
+      Level 4 — Really FAIR     : large (30px) dark green  circle  (p > 0.5)
+      Level 3 — Slightly FAIR   : small (20px) light green circle  (0.05 < p ≤ 0.5)
+      Level 2 — Slightly UNFAIR : small (20px) light red   triangle (0.01 < p ≤ 0.05)
+      Level 1 — Really UNFAIR   : large (30px) dark red    triangle (p ≤ 0.01)
+    """
+    if verdict == 'na' or p_value is None:
+        return {'shape': 'na', 'level': 0, 'color': None, 'size': 14, 'p': None}
+    if verdict == 'fair':
+        if p_value > 0.5:
+            return {'shape': 'circle',   'level': 4, 'color': '#15803d', 'size': 30, 'p': p_value}
+        else:
+            return {'shape': 'circle',   'level': 3, 'color': '#4ade80', 'size': 20, 'p': p_value}
+    else:
+        if p_value <= 0.01:
+            return {'shape': 'triangle', 'level': 1, 'color': '#b91c1c', 'size': 30, 'p': p_value}
+        else:
+            return {'shape': 'triangle', 'level': 2, 'color': '#f87171', 'size': 20, 'p': p_value}
+
+
 def _load_global_benchmark():
     """
     Load the researcher's pre-computed full-population fairness benchmark.
-    Returns a dict: {attribute_name: {FAIR_g0, Pairwise_g0, Proportion_g0,
-                                       FAIR_g1, Pairwise_g1, Proportion_g1}}
-    Values are 'fair', 'unfair', or None.
+    Returns dict: {attribute: {FAIR_g1: verdict, FAIR_g1_p: sim_p, ...}}
+    Verdicts are 'fair'/'unfair'/None; p-values are simulated from uniform distributions.
     """
     benchmark_path = os.path.join(settings.PLAYDATA_ROOT, 'fairness_benchmark.csv')
     if not os.path.exists(benchmark_path):
@@ -134,7 +166,13 @@ def _load_global_benchmark():
     lookup = {}
     for _, row in df.iterrows():
         attr = str(row['attribute'])
-        lookup[attr] = {col: _to_verdict(row[col]) for col in bool_cols if col in df.columns}
+        entry = {}
+        for col in bool_cols:
+            if col in df.columns:
+                verdict = _to_verdict(row[col])
+                entry[col] = verdict
+                entry[col + '_p'] = _simulate_p_value(verdict)
+        lookup[attr] = entry
     return lookup
 
 
@@ -201,43 +239,47 @@ def gene_analysis(request):
                     g_fair       = gbm.get(f'FAIR_{grp}')
                     g_pairwise   = gbm.get(f'Pairwise_{grp}')
                     g_proportion = gbm.get(f'Proportion_{grp}')
+                    g_p_fair     = gbm.get(f'FAIR_{grp}_p')
+                    g_p_pairwise = gbm.get(f'Pairwise_{grp}_p')
+                    g_p_proportion = gbm.get(f'Proportion_{grp}_p')
                 else:
                     g_fair = g_pairwise = g_proportion = None
+                    g_p_fair = g_p_pairwise = g_p_proportion = None
 
+                # Alignment tracking for stat bar
                 m_fair       = _compare(res_fair,       g_fair)
                 m_pairwise   = _compare(res_pairwise,   g_pairwise)
                 m_proportion = _compare(res_proportion, g_proportion)
-
-                match_count      = sum(1 for m in (m_fair, m_pairwise, m_proportion) if m == 'match')
-                comparable_count = sum(1 for m in (m_fair, m_pairwise, m_proportion) if m != 'na')
-
                 for m in (m_fair, m_pairwise, m_proportion):
                     if m != 'na':
                         alignment_total += 1
                         if m == 'match':
                             alignment_matches += 1
 
+                # Shape display dicts (local)
+                fair_d       = _oracle_display(p_vals[0], res_fair)
+                pairwise_d   = _oracle_display(p_vals[2], res_pairwise)
+                proportion_d = _oracle_display(p_vals[4], res_proportion)
+
+                # Shape display dicts (global — uses simulated p-values)
+                has_global = gbm is not None and grp is not None
+                g_fair_d       = _oracle_display(g_p_fair,       g_fair)       if has_global else _oracle_display(None, 'na')
+                g_pairwise_d   = _oracle_display(g_p_pairwise,   g_pairwise)   if has_global else _oracle_display(None, 'na')
+                g_proportion_d = _oracle_display(g_p_proportion, g_proportion) if has_global else _oracle_display(None, 'na')
+
                 val_rows.append({
-                    'value':          val_key,
-                    'res_fair':       res_fair,
-                    'res_pairwise':   res_pairwise,
-                    'res_proportion': res_proportion,
-                    'p_fair':         p_vals[0],
-                    'alphac_fair':    p_vals[1],
-                    'p_pairwise':     p_vals[2],
-                    'alpha_pairwise': p_vals[3],
-                    'p_proportion':   p_vals[4],
-                    'alpha_proportion': p_vals[5],
-                    # Global comparison
-                    'g_fair':         g_fair,
-                    'g_pairwise':     g_pairwise,
-                    'g_proportion':   g_proportion,
-                    'match_fair':        m_fair,
-                    'match_pairwise':    m_pairwise,
-                    'match_proportion':  m_proportion,
-                    'match_count':       match_count,
-                    'comparable_count':  comparable_count,
-                    'has_global':        gbm is not None and grp is not None,
+                    'value':         val_key,
+                    'sign':          '+' if val_key in ('1.0', '1') else '−',
+                    'has_unfair':    res_fair == 'unfair' or res_pairwise == 'unfair' or res_proportion == 'unfair',
+                    'has_global':    has_global,
+                    # Local shape displays
+                    'fair_d':        fair_d,
+                    'pairwise_d':    pairwise_d,
+                    'proportion_d':  proportion_d,
+                    # Global shape displays
+                    'g_fair_d':        g_fair_d,
+                    'g_pairwise_d':    g_pairwise_d,
+                    'g_proportion_d':  g_proportion_d,
                 })
 
         fairness_table.append({

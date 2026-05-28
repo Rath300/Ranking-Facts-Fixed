@@ -197,9 +197,9 @@ def runFairOracles(chosed_atts, current_file, alpha_default=0.05, k_threshold=20
     data = pd.read_csv(current_file + "_weightsum.csv")
     total_n = len(data)
     if total_n > k_threshold:
-        top_K = 100
+        top_K = 10
     else:
-        top_K = int(np.ceil(k_percentage * total_n))
+        top_K = min(10, int(np.ceil(k_percentage * total_n)))
 
     fair_res_data = {}
     fair_statement_data = {}
