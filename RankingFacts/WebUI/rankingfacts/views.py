@@ -141,9 +141,14 @@ def _oracle_display(p_value, verdict):
     t         = min(1.0, log_val / max_log)     # 0 = most fair, 1 = most unfair
 
     size  = round(8 + t * 24)                   # 8px … 32px
-    hue   = round(120 * (1.0 - t))              # 120° (green) … 0° (red)
-    light = round(35 + t * 8)                   # 35% … 43%
-    color = f'hsl({hue},65%,{light}%)'
+
+    # Colour: green (hsl 100°) → yellow (hsl 55°) → red (hsl 0°)
+    # Yellow sits near t≈0.43 (p=0.05 threshold) so the boundary is obvious.
+    # We push the hue curve so yellow is centred on the threshold.
+    hue   = round(100 * (1.0 - t) ** 0.7)      # 100° (green) … 0° (red), yellow ≈ midpoint
+    sat   = round(75 + t * 10)                  # 75% … 85%  (gets punchier toward red)
+    light = round(42 - t * 8)                   # 42% … 34%  (gets darker toward extremes)
+    color = f'hsl({hue},{sat}%,{light}%)'
 
     return {'is_na': False, 'size': size, 'color': color, 'p': p_value}
 

@@ -574,13 +574,19 @@
               <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--rf-text-muted);">Color &amp; Size Scale (–log₂ p)</span>
               <div style="display:flex;align-items:center;gap:10px;">
                 <!-- Small green = fair -->
-                <svg width="8" height="8" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(120,65%,35%)"/></svg>
-                <!-- gradient bar -->
-                <div style="width:120px;height:10px;border-radius:5px;
-                     background:linear-gradient(to right,hsl(120,65%,35%),hsl(90,65%,37%),hsl(60,65%,39%),hsl(30,65%,40%),hsl(0,65%,43%));
+                <svg width="8" height="8" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(100,75%,42%)"/></svg>
+                <!-- gradient bar: green → yellow → red -->
+                <div style="width:140px;height:10px;border-radius:5px;
+                     background:linear-gradient(to right,
+                       hsl(100,75%,42%),
+                       hsl(75,78%,40%),
+                       hsl(55,82%,40%),
+                       hsl(30,84%,38%),
+                       hsl(10,85%,36%),
+                       hsl(0,85%,34%));
                      border:1px solid var(--rf-border);"></div>
                 <!-- Large red = unfair -->
-                <svg width="22" height="22" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(0,65%,43%)"/></svg>
+                <svg width="22" height="22" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(0,85%,34%)"/></svg>
               </div>
               <div style="display:flex;justify-content:space-between;width:158px;">
                 <span style="font-size:0.68rem;color:var(--rf-text-muted);">FAIR (p → 1)</span>
