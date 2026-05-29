@@ -1,19 +1,27 @@
 {% comment %}
-Shape cell partial — single circle whose size and color follow a continuous -log2(p) gradient.
-Usage: {% include "rankingfacts/_shape_cell.html" with d=vrow.fair_d %}
-d = {'is_na': bool, 'size': int (8-32), 'color': 'hsl(…)', 'p': float|None}
-Small green circle = fair (p near 1). Large red circle = unfair (p near 0).
+Shape cell partial.
+d = {'is_na': bool, 'shape': 'circle'|'triangle', 'size': int, 'color': 'hsl(…)', 'p': float|None}
+
+Shape encodes verdict:  circle = FAIR, triangle = UNFAIR
+Color density encodes strength within each family:
+  Green family (circles) : light green (p→1, strongly fair) → dark green (p→0.05, barely fair)
+  Red family (triangles) : light red (p just below 0.05, barely unfair) → dark red (p→0, strongly unfair)
+Size encodes a separate dimension (simulated randomly for now).
 {% endcomment %}
 <div class="shape-cell-inner">
   {% if d.is_na %}
     <span class="shape-na">—</span>
-  {% else %}
+  {% elif d.shape == 'circle' %}
     <svg width="{{ d.size }}" height="{{ d.size }}" viewBox="0 0 30 30"
          style="display:block;margin:0 auto;overflow:visible;">
       <circle cx="15" cy="15" r="13" fill="{{ d.color }}"/>
     </svg>
-    {% if d.p is not None %}
-      <span class="shape-p-text">p={{ d.p }}</span>
-    {% endif %}
+    {% if d.p is not None %}<span class="shape-p-text">p={{ d.p }}</span>{% endif %}
+  {% elif d.shape == 'triangle' %}
+    <svg width="{{ d.size }}" height="{{ d.size }}" viewBox="0 0 30 26"
+         style="display:block;margin:0 auto;overflow:visible;">
+      <polygon points="15,1 29,25 1,25" fill="{{ d.color }}"/>
+    </svg>
+    {% if d.p is not None %}<span class="shape-p-text">p={{ d.p }}</span>{% endif %}
   {% endif %}
 </div>

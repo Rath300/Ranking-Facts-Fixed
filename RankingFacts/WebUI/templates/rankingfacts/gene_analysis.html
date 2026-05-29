@@ -570,29 +570,38 @@
         <div class="rf-card-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
           <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
 
-            <!-- Gradient scale -->
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--rf-text-muted);">Color &amp; Size Scale (–log₂ p)</span>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <!-- Small green = fair -->
-                <svg width="8" height="8" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(100,78%,40%)"/></svg>
-                <!-- gradient bar mirrors the piecewise green→yellow→red curve -->
-                <div style="width:150px;height:10px;border-radius:5px;
-                     background:linear-gradient(to right,
-                       hsl(100,78%,40%),
-                       hsl(82,80%,39%),
-                       hsl(55,82%,38%),
-                       hsl(35,84%,37%),
-                       hsl(15,85%,36%),
-                       hsl(0,85%,34%));
+            <!-- Two-scale legend -->
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--rf-text-muted);">Shape &amp; Color Scale</span>
+
+              <!-- FAIR: green circles -->
+              <div style="display:flex;align-items:center;gap:8px;">
+                <svg width="10" height="10" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(120,40%,88%)"/></svg>
+                <div style="width:90px;height:8px;border-radius:4px;
+                     background:linear-gradient(to right,hsl(120,40%,88%),hsl(120,62%,60%),hsl(120,85%,32%));
                      border:1px solid var(--rf-border);"></div>
-                <!-- Large red = unfair -->
-                <svg width="22" height="22" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(0,85%,34%)"/></svg>
+                <svg width="16" height="16" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="hsl(120,85%,32%)"/></svg>
+                <div style="display:flex;flex-direction:column;">
+                  <span style="font-size:0.7rem;font-weight:600;color:#15803d;">● FAIR (circle)</span>
+                  <span style="font-size:0.65rem;color:var(--rf-text-muted);">light = p→1 &nbsp;·&nbsp; dark = p→0.05</span>
+                </div>
               </div>
-              <div style="display:flex;justify-content:space-between;width:158px;">
-                <span style="font-size:0.68rem;color:var(--rf-text-muted);">FAIR (p → 1)</span>
-                <span style="font-size:0.68rem;color:var(--rf-text-muted);">UNFAIR (p → 0)</span>
+
+              <!-- UNFAIR: red triangles -->
+              <div style="display:flex;align-items:center;gap:8px;">
+                <svg width="10" height="9" viewBox="0 0 30 26"><polygon points="15,1 29,25 1,25" fill="hsl(0,40%,88%)"/></svg>
+                <div style="width:90px;height:8px;border-radius:4px;
+                     background:linear-gradient(to right,hsl(0,40%,88%),hsl(0,62%,60%),hsl(0,85%,32%));
+                     border:1px solid var(--rf-border);"></div>
+                <svg width="16" height="14" viewBox="0 0 30 26"><polygon points="15,1 29,25 1,25" fill="hsl(0,85%,32%)"/></svg>
+                <div style="display:flex;flex-direction:column;">
+                  <span style="font-size:0.7rem;font-weight:600;color:#b91c1c;">▲ UNFAIR (triangle)</span>
+                  <span style="font-size:0.65rem;color:var(--rf-text-muted);">light = p→0.05 &nbsp;·&nbsp; dark = p→0</span>
+                </div>
               </div>
+
+              <!-- Size note -->
+              <span style="font-size:0.65rem;color:var(--rf-text-muted);font-style:italic;">Size = separate dimension (simulated, real data coming)</span>
             </div>
 
             <!-- NA -->

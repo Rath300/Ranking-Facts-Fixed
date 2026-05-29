@@ -135,30 +135,36 @@ def _oracle_display(p_value, verdict):
     if verdict == 'na' or p_value is None:
         return {'is_na': True, 'size': 0, 'color': None, 'p': None}
 
-    # Cap at p=0.005 so anything ≤ 0.005 is full red — prevents washing out low p-values.
-    P_MIN   = 0.005
-    ALPHA   = 0.05                                   # significance threshold
-    p_clamped = max(P_MIN, min(1.0, float(p_value)))
-    log_val   = -math.log2(p_clamped)               # 0 … 7.64
-    max_log   = -math.log2(P_MIN)                   # ≈ 7.64
-    t         = min(1.0, log_val / max_log)          # 0 = fair, 1 = unfair
+    ALPHA = 0.05
+    p_val = float(p_value)
 
-    # Threshold sits at t_thresh in this scale
-    t_thresh = -math.log2(ALPHA) / max_log           # ≈ 0.565
+    # Size is independent of p-value — random placeholder until real size data arrives
+    size = random.randint(14, 28)
 
-    # Piecewise hue: green(100°) → yellow(55°) at threshold → red(0°) at p_min
-    if t <= t_thresh:
-        hue = round(100 - 45 * (t / t_thresh))       # 100° … 55°
+    if verdict == 'fair':
+        # ── Green family ──────────────────────────────────────────────────────
+        # Density encodes distance from threshold: p=1.0 → lightest, p→0.05 → darkest
+        # t: 0 at p=1.0 (far from threshold, strongly fair)
+        #    1 at p=0.05 (barely fair, right at threshold)
+        t = max(0.0, min(1.0, (1.0 - p_val) / (1.0 - ALPHA)))
+        sat   = round(40 + t * 45)       # 40% (light) … 85% (deep)
+        light = round(88 - t * 56)       # 88% (light) … 32% (deep)
+        color = f'hsl(120,{sat}%,{light}%)'
+        shape = 'circle'
+
     else:
-        hue = round(55 * (1 - (t - t_thresh) / (1 - t_thresh)))  # 55° … 0°
-    hue = max(0, hue)
+        # ── Red family ────────────────────────────────────────────────────────
+        # Density encodes distance from threshold: p just below 0.05 → lightest,
+        # p near 0 → darkest.  Use log scale so mid-range reds are spread out.
+        p_clamped = max(0.001, min(ALPHA, p_val))
+        t = math.log(ALPHA / p_clamped) / math.log(ALPHA / 0.001)  # 0 … 1
+        t = max(0.0, min(1.0, t))
+        sat   = round(40 + t * 45)       # 40% (light) … 85% (deep)
+        light = round(88 - t * 56)       # 88% (light) … 32% (deep)
+        color = f'hsl(0,{sat}%,{light}%)'
+        shape = 'triangle'
 
-    size  = round(8 + t * 24)                        # 8px … 32px
-    sat   = round(78 + t * 7)                        # 78% … 85%
-    light = round(40 - t * 6)                        # 40% … 34%
-    color = f'hsl({hue},{sat}%,{light}%)'
-
-    return {'is_na': False, 'size': size, 'color': color, 'p': p_value}
+    return {'is_na': False, 'shape': shape, 'size': size, 'color': color, 'p': p_value}
 
 
 def _load_global_benchmark():
