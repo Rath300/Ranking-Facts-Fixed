@@ -123,14 +123,10 @@ def _simulate_p_value(verdict):
 
 def _oracle_display(p_value, verdict):
     """
-    Returns a display dict for a single circle whose size and color both follow
-    a continuous -log2(p) gradient:
-      Small + green  →  fair     (p near 1.0)
-      Large + red    →  unfair   (p near 0.0)
-
-    t = -log2(p) / -log2(0.001)   normalised to [0, 1]
-    size : 8px (t=0, fair) → 32px (t=1, unfair)
-    color: hsl(120°→0°)  green → yellow → red
+    Returns a display dict for a fairness symbol whose color follows a -log(p) scale:
+      Green family (circle)  : t = log(1/p) / log(1/0.05)   → light at p=1.0, dark at p=0.05
+      Red   family (triangle): t = log(0.05/p) / log(0.05/0.001) → light at p≈0.05, dark at p=0.001
+    Size is randomly simulated (independent of p) until real size data is available.
     """
     if verdict == 'na' or p_value is None:
         return {'is_na': True, 'size': 0, 'color': None, 'p': None}
@@ -143,10 +139,12 @@ def _oracle_display(p_value, verdict):
 
     if verdict == 'fair':
         # ── Green family ──────────────────────────────────────────────────────
-        # Density encodes distance from threshold: p=1.0 → lightest, p→0.05 → darkest
-        # t: 0 at p=1.0 (far from threshold, strongly fair)
-        #    1 at p=0.05 (barely fair, right at threshold)
-        t = max(0.0, min(1.0, (1.0 - p_val) / (1.0 - ALPHA)))
+        # -log scale: t = log(1/p) / log(1/0.05)
+        #   t → 0 at p=1.0  (strongly fair  → lightest green)
+        #   t → 1 at p=0.05 (barely fair    → darkest  green)
+        p_clamped_fair = max(ALPHA, min(1.0, p_val))
+        t = math.log(1.0 / p_clamped_fair) / math.log(1.0 / ALPHA)
+        t = max(0.0, min(1.0, t))
         sat   = round(40 + t * 45)       # 40% (light) … 85% (deep)
         light = round(88 - t * 56)       # 88% (light) … 32% (deep)
         color = f'hsl(120,{sat}%,{light}%)'
