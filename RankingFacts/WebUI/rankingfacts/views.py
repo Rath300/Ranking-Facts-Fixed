@@ -159,9 +159,14 @@ def _oracle_display(p_value, verdict):
         p_clamped = max(0.001, min(ALPHA, p_val))
         t = math.log(ALPHA / p_clamped) / math.log(ALPHA / 0.001)  # 0 … 1
         t = max(0.0, min(1.0, t))
-        sat   = round(40 + t * 45)       # 40% (light) … 85% (deep)
-        light = round(88 - t * 56)       # 88% (light) … 32% (deep)
-        color = f'hsl(0,{sat}%,{light}%)'
+        # Hue shifts from warm salmon (10°) through pure red (0°) to deep crimson (348°)
+        # giving much more visual spread across the unfair range.
+        hue   = round(10 - t * 22)      # 10° (salmon) … -12° → wraps to 348° (crimson)
+        if hue < 0:
+            hue += 360
+        sat   = round(38 + t * 52)      # 38% (pale) … 90% (vivid)
+        light = round(91 - t * 65)      # 91% (light) … 26% (deep)
+        color = f'hsl({hue},{sat}%,{light}%)'
         shape = 'triangle'
 
     return {'is_na': False, 'shape': shape, 'size': size, 'color': color, 'p': p_value}
