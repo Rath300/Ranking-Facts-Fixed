@@ -16,7 +16,7 @@ from FAIR.FairnessInRankings import FairnessInRankingsTester
 # ---------------------------------------------------------------------------
 GENE_DEFAULT_FEATURES = [
     "Lek et al., 2016: exome variation, pLI",
-    "Itzhak et al., 2016: protein localization, plasma membrane",
+    "Blomen et al., 2015: p value (KBM7 cells)",
     "Hart et al., 2015: gene essentiality in HeLa",
     "Uhlen et al., 2015: RNA expression, log10 FPKM: liver_a",
     "Tani et al., 2012: RNA halflife",
